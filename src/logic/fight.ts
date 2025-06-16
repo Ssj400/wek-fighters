@@ -44,6 +44,8 @@ export async function fight(fighter1: Fighter, fighter2: Fighter): Promise<void>
           if (!validateLife(fighter2)) break;
         }
     }
+    await fighter1.recoverStamina();
+    await fighter2.recoverStamina();
     await typeText("===================The turn has ended!=====================\n");
   }
 }

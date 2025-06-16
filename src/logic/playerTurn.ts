@@ -5,7 +5,7 @@ import { typeText } from "../utils/typeText";
 export async function playerTurn(player: Fighter, opponent: Fighter): Promise<void> {
   await typeText(`\n${player.name}'s turn!`);
 
-  await typeText('Choose an action: \n1.Attack\n2.Block\n3.Stats\n');
+  await typeText('Choose an action: \n1.Attack\n2.Block\n3.Recover\n4.Stats\n');
   const action = readlineSync.question('> ');
 
   if (action === "1") {
@@ -13,6 +13,8 @@ export async function playerTurn(player: Fighter, opponent: Fighter): Promise<vo
   } else if (action === "2") {
     await player.block();
   } else if (action === "3") {
+    await player.recoverHealth();
+  } else if (action === "4") {
     await player.getStats();
     await opponent.getStats();
     await playerTurn(player, opponent); 

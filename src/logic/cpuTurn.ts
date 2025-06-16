@@ -5,10 +5,13 @@ export async function cpuTurn(cpu: Fighter, player: Fighter): Promise<void> {
   await typeText(`\n${cpu.name}'s turn!`);
 
   const lifeRatio = cpu.health / 100;
-  const shouldBlock = Math.random() < 0.4 || lifeRatio < 0.3; // Más defensivo si tiene poca vida
+  const shouldBlock = Math.random() < 0.4 || lifeRatio < 0.5; 
+  const shouldRecover = Math.random() < 0.2 || lifeRatio < 0.2; 
 
   if (shouldBlock && cpu.blockFail < 0.7) {
     await cpu.block();
+  } else if (shouldRecover) {
+    await cpu.recoverHealth();
   } else {
     await cpu.attack(player);
   }

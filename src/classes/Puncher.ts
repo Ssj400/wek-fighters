@@ -5,19 +5,25 @@ import { typeText } from '../utils/typeText.js';
 export class Puncher extends Fighter {
   damageMultiplicator: number;
 
-  constructor(name: string, health: number, strength: number, speed: number, blockFail: number = 0, isBlocking: boolean = false, damageMultiplicator: number) {
-    super(name, health, strength, speed, blockFail, isBlocking);
+  constructor(name: string, health: number, strength: number, speed: number, stamina: number, blockFail: number = 0, isBlocking: boolean = false, damageMultiplicator: number) {
+    super(name, health, strength, speed, blockFail, stamina, isBlocking);
     this.damageMultiplicator = damageMultiplicator;
   }
 
-    override async getStats(): Promise<void> {
-      await typeText(chalk.bgGreen(`Statistics | fighter: ${this.name}, health: ${this.health}, strength: ${this.strength}, *SPECIAL* Multiplicator: ${this.damageMultiplicator}, speed: ${this.speed}\n`));
-    }
+  override async getStats(): Promise<void> {
+    await typeText(chalk.bgGreen(`Statistics | fighter: ${this.name}, health: ${this.health}, strength: ${this.strength}, stamina: ${this.stamina} *SPECIAL* Multiplicator: ${this.damageMultiplicator}, speed: ${this.speed}\n`), 1);
+  }
 
   override async attack(target: Fighter): Promise<void> {
-    const damage = Math.floor(this.strength * (0.8 + Math.random() * 0.4)) * this.damageMultiplicator;
+  if (this.stamina < 10) {
+    await typeText(chalk.bgRed(`${this.name} does not have enough stamina to attack!\n`));
+    return;
+  }
+
+    this.stamina -= 10; 
+    const damage = Math.floor(this.strength / 2 + this.stamina / 6  * (0.8 + Math.random() * 0.4)) * this.damageMultiplicator;
     await typeText(chalk.bgGray.bold(`${this.name} has attacked ${target.name}!\n`));
-  this.isBlocking = false;
+    this.isBlocking = false;
 
   if (target.isBlocking) {
       await typeText(chalk.bgGreen(`${target.name} successfully blocked the attack!\n`));
