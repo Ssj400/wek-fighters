@@ -6,8 +6,8 @@ import { promises } from 'dns';
 export class CounterPuncher extends Fighter {
   counterIndex: number;
 
-  constructor(name: string, health: number, strength: number, speed: number, stamina: number, blockFail: number = 0, isBlocking: boolean = false, counterIndex: number) {
-    super(name, health, strength, speed, blockFail, stamina, isBlocking);
+  constructor(name: string, health: number, strength: number, speed: number, blockFail: number = 0, isBlocking: boolean = false, counterIndex: number, rageSuceptibility: boolean = false) {
+    super(name, health, strength, speed, blockFail, isBlocking, rageSuceptibility);
     this.counterIndex = counterIndex;
   }
 
@@ -22,7 +22,7 @@ export class CounterPuncher extends Fighter {
       this.health -= damage * 1.2;
     } else {
       this.health -= damage;
-      await typeText(chalk.bgRed(`${this.name} has received ${damage} damage!\n`));
+      await typeText(chalk.bgRed(`${this.name} has received ${damage.toFixed(2)} damage!\n`));
     }
 
     if (Math.random() < this.counterIndex && this.health > 0 && this.stamina >= 20) {
@@ -35,6 +35,7 @@ export class CounterPuncher extends Fighter {
     if (this.health <= 0) {
       this.health = 0;
       await typeText(chalk.bgGray(`${this.name} has been defeated!\n`));
+      return;
     } else {
       await typeText(chalk.bgGreen(`${this.name}'s health is now ${this.health}\n`));
     }

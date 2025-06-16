@@ -11,7 +11,7 @@ export async function fight(fighter1: Fighter, fighter2: Fighter): Promise<void>
   await fighter1.getStats();
   await fighter2.getStats();
 
-  for (let i = 0; i < 10; i++) {
+  while (fighter1.health > 0 && fighter2.health > 0) {
     if (!validateLife(fighter1)) break;
     if (!validateLife(fighter2)) break;
 
@@ -44,6 +44,8 @@ export async function fight(fighter1: Fighter, fighter2: Fighter): Promise<void>
           if (!validateLife(fighter2)) break;
         }
     }
+    if (!validateLife(fighter1)) break;
+    if (!validateLife(fighter2)) break;
     await fighter1.recoverStamina();
     await fighter2.recoverStamina();
     await typeText("===================The turn has ended!=====================\n");

@@ -5,8 +5,8 @@ import { typeText } from "../utils/typeText";
 export class Defender extends Fighter {
   defense: number;
 
-  constructor(name: string, health: number, strength: number, speed: number, stamina: number, blockFail: number = 0, isBlocking: boolean = false, defense: number,) {
-    super(name, health, strength, speed, blockFail, stamina, isBlocking);
+  constructor(name: string, health: number, strength: number, speed: number, blockFail: number = 0, isBlocking: boolean = false, defense: number, rageSuceptibility: boolean = false) {
+    super(name, health, strength, speed, blockFail, isBlocking, rageSuceptibility);
     this.defense = defense;
   }
   override async getStats(): Promise<void> {
@@ -21,7 +21,7 @@ export class Defender extends Fighter {
       const reducedDamage = Math.max(0, damage - this.defense);
       this.defense = Math.max(0, this.defense - Math.floor(this.defense * 0.2));
       this.health -= reducedDamage;
-      await typeText(chalk.bgMagenta(`${this.name} has received ${reducedDamage} damage after defense!\n`));
+      await typeText(chalk.bgMagenta(`${this.name} has received ${reducedDamage.toFixed(2)} damage after defense!\n`));
       await typeText(chalk.bgCyanBright(`${this.name}'s defense is now ${this.defense}\n`));
       this.stamina -= 10; 
     }
@@ -29,6 +29,7 @@ export class Defender extends Fighter {
     if (this.health <= 0) {
       this.health = 0;
       await typeText(chalk.bgGray(`${this.name} has been defeated!\n`));
+      return;
     } else {
       await typeText(chalk.bgGreen(`${this.name}'s health is now ${this.health}\n`));
     }

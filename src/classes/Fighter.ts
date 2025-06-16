@@ -9,7 +9,8 @@ export class Fighter {
   stamina: number;
   blockFail: number;
   isBlocking: boolean;
-  constructor(name: string, health: number, strength: number, speed: number, stamina: number, blockFail: number = 0, isBlocking: boolean = false) {
+  rageSuceptibility: boolean;
+  constructor(name: string, health: number, strength: number, speed: number, blockFail: number = 0, isBlocking: boolean = false, rageSuceptibility: boolean = false) {
     this.name = name;
     this.health = health;
     this.strength = strength;
@@ -17,6 +18,7 @@ export class Fighter {
     this.blockFail = blockFail;
     this.isBlocking = isBlocking;
     this.stamina = 100;
+    this.rageSuceptibility = rageSuceptibility; 
   }
 
   async getStats(): Promise<void> {
@@ -24,16 +26,26 @@ export class Fighter {
   }
 
   async attack(target: Fighter): Promise<void> {
-    if (this.stamina < 10) {
+    if (this.checkIfTired()) {
       await typeText(chalk.bgRed(`${this.name} does not have enough stamina to attack!\n`));
       return;
-    } 
-    const damage = Math.floor(this.strength / 2 + this.stamina / 5 * (0.8 + Math.random() * 0.4));
+    } else if (this.rageMode()) {
+      await typeText(chalk.bgRed(`${this.name} is getting angry and attacks with rage!\n`));
+      this.rageSuceptibility = false;
+      await typeText(chalk.bgRed.bold(`${this.name} attacks ${target.name} two times because of his lack of control!\n`));
+      await this.attack(target);
+      await this.attack(target);
+      this.stamina = 0;
+      await typeText(chalk.bgRed.bold(`${this.name} is getting tired after rage!\n`));
+      return;
+    }
+
+    const damage = (Math.floor(this.strength / 3 + this.stamina / 10 * (0.8 + Math.random() * 0.4)));
 
     await typeText(chalk.bgBlue.bold(`${this.name} has attacked ${target.name}!\n`));
 
     this.isBlocking = false; 
-    this.stamina -= 10; 
+    this.stamina -= 20; 
 
     if (target.isBlocking) {
      await typeText(chalk.bgGreen(`${target.name} successfully blocked the attack!\n`));
@@ -47,14 +59,16 @@ export class Fighter {
     if (this.stamina < 30) {
       await typeText(chalk.bgRed(`${this.name} completely receives the attack! \n`));
       this.health -= damage * 1.2;
+      await typeText(chalk.bgRed(`${this.name} has received ${(damage * 1.2).toFixed(2)} damage!\n`));
     } else {
       this.health -= damage;
-      await typeText(chalk.bgRed(`${this.name} has received ${damage} damage!\n`));
+      await typeText(chalk.bgRed(`${this.name} has received ${damage.toFixed(2)} damage!\n`));
     }
     
     if (this.health <= 0) {
       this.health = 0;
       await typeText(chalk.bgGray(`${this.name} has been defeated!\n`));
+      return;
     } else {
       await typeText(chalk.bgGreen(`${this.name}'s health is now ${this.health}\n`));
     }
@@ -77,19 +91,24 @@ export class Fighter {
     this.health += recoveryAmount;
     this.stamina += 10; 
     await typeText(chalk.bgCyan(`${this.name} has recovered ${recoveryAmount} health and gained 10 stamina!\n`));
-    if (this.health > 100) {
-      this.health = 100; 
-    } else if (this.stamina > 100) {
-      this.stamina = 100; 
-    }
+    if (this.health > 100) this.health = 100; 
+    if (this.stamina > 100) this.stamina = 100; 
   }
 
   async recoverStamina(): Promise<void> {
-    const recoveryAmount = Math.floor(Math.random() * 7) + 10; 
+    const recoveryAmount = Math.floor(Math.random() * 7) + 3; 
     this.stamina += recoveryAmount;
     await typeText(chalk.bgMagenta(`${this.name} has recovered ${recoveryAmount} stamina!\n`));
     if (this.stamina > 100) {
       this.stamina = 100; 
     }
+  }
+
+  checkIfTired(): boolean {
+    return this.stamina <= 15;
+  }
+
+  rageMode(): boolean {
+    return this.health <= 35 && this.stamina > 20 && this.rageSuceptibility;
   }
 }
