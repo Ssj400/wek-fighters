@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { typeText } from "../utils/typeText";
-import { Attack } from "../common/attacks"
+import { Attack } from "../common/attacks";
 export class Fighter {
   public readonly name: string;
   protected health: number;
@@ -12,74 +12,116 @@ export class Fighter {
   protected rageSuceptibility: boolean;
   protected attacks: Record<string, Attack> = {};
 
-  constructor(name: string, health: number, strength: number, speed: number, blockFail: number = 0, isBlocking: boolean = false, rageSuceptibility: boolean = false) {
+  constructor(
+    name: string,
+    health: number,
+    strength: number,
+    speed: number,
+    blockFail: number = 0,
+    isBlocking: boolean = false,
+    rageSuceptibility: boolean = false
+  ) {
     this.name = name;
     this.health = health;
     this.strength = strength;
-    this.speed = speed; 
+    this.speed = speed;
     this.blockFail = blockFail;
     this.isBlocking = isBlocking;
     this.stamina = 100;
-    this.rageSuceptibility = rageSuceptibility; 
+    this.rageSuceptibility = rageSuceptibility;
   }
 
   async getStats(): Promise<void> {
-    await typeText(chalk.bgGreen(`Statistics | fighter: ${this.name}, health: ${this.health}, strength: ${this.strength} speed: ${this.speed} stamina: ${this.stamina}\n`), 1);
+    await typeText(
+      chalk.bgGreen(
+        `Statistics | fighter: ${this.name}, health: ${this.health}, strength: ${this.strength} speed: ${this.speed} stamina: ${this.stamina}\n`
+      ),
+      1
+    );
   }
 
   async normalAttack(target: Fighter): Promise<void> {
     if (this.checkIfTired()) {
-      await typeText(chalk.bgRed(`${this.name} does not have enough stamina to attack!\n`));
+      await typeText(
+        chalk.bgRed(`${this.name} does not have enough stamina to attack!\n`)
+      );
       return;
     } else if (this.rageMode()) {
-      await typeText(chalk.bgRed(`${this.name} is getting angry and attacks with rage!\n`));
+      await typeText(
+        chalk.bgRed(`${this.name} is getting angry and attacks with rage!\n`)
+      );
       this.rageSuceptibility = false;
-      await typeText(chalk.bgRed.bold(`${this.name} attacks ${target.name} two times because of his lack of control!\n`));
+      await typeText(
+        chalk.bgRed.bold(
+          `${this.name} attacks ${target.name} two times because of his lack of control!\n`
+        )
+      );
       await this.normalAttack(target);
       await this.normalAttack(target);
       this.stamina = 0;
-      await typeText(chalk.bgRed.bold(`${this.name} is getting tired after rage!\n`));
+      await typeText(
+        chalk.bgRed.bold(`${this.name} is getting tired after rage!\n`)
+      );
       return;
     }
 
-    const damage = (Math.floor(this.strength / 3 + this.stamina / 10 * (0.8 + Math.random() * 0.4)));
+    const damage = Math.floor(
+      this.strength / 3 + (this.stamina / 10) * (0.8 + Math.random() * 0.4)
+    );
 
-    await typeText(chalk.bgBlue.bold(`${this.name} has attacked ${target.name}!\n`));
+    await typeText(
+      chalk.bgBlue.bold(`${this.name} has attacked ${target.name}!\n`)
+    );
 
-    this.isBlocking = false; 
-    this.stamina -= 20; 
-
-    if (target.isBlocking) {
-     await typeText(chalk.bgGreen(`${target.name} successfully blocked the attack!\n`));
-    } else {
-     await typeText(chalk.bgRed(`${target.name} failed to block the attack!\n`));
-      await target.receiveDamage(damage, this);
-    }
-}
+    this.isBlocking = false;
+    this.stamina -= 20;
+    await target.receiveDamage(damage, this);
+  }
 
   async receiveDamage(damage: number, oponent: Fighter): Promise<void> {
+    if (this.isCurrentlyBlocking()) {
+      await typeText(
+        chalk.bgGreen(`${this.name} successfully blocked the attack!\n`)
+      );
+      return;
+    }
+
+    await typeText(
+      chalk.bgRed(`${this.name} failed to block the attack!\n`)
+    );
+
     if (this.stamina < 30) {
-      await typeText(chalk.bgRed(`${this.name} completely receives the attack! \n`));
+      await typeText(
+        chalk.bgRed(`${this.name} completely receives the attack! \n`)
+      );
       this.health -= damage * 1.2;
-      await typeText(chalk.bgRed(`${this.name} has received ${(damage * 1.2).toFixed(2)} damage!\n`));
+      await typeText(
+        chalk.bgRed(
+          `${this.name} has received ${(damage * 1.2).toFixed(2)} damage!\n`
+        )
+      );
     } else {
       this.health -= damage;
-      await typeText(chalk.bgRed(`${this.name} has received ${damage.toFixed(2)} damage!\n`));
+      await typeText(
+        chalk.bgRed(`${this.name} has received ${damage.toFixed(2)} damage!\n`)
+      );
     }
-    
+
     if (this.health <= 0) {
       this.health = 0;
       await typeText(chalk.bgGray(`${this.name} has been defeated!\n`));
       return;
     } else {
-      await typeText(chalk.bgGreen(`${this.name}'s health is now ${this.health}\n`));
+      await typeText(
+        chalk.bgGreen(`${this.name}'s health is now ${this.health}\n`)
+      );
     }
   }
 
   async block(): Promise<void> {
     const blockChance = Math.random();
     await typeText(chalk.bgYellow(`${this.name} covers!\n`));
-    this.stamina -= 5; 
+    this.stamina -= 5;
     if (blockChance > this.blockFail) {
       this.isBlocking = true;
     } else {
@@ -89,20 +131,26 @@ export class Fighter {
   }
 
   async recoverHealth(): Promise<void> {
-    const recoveryAmount = Math.floor(Math.random() * 20) + 10; 
+    const recoveryAmount = Math.floor(Math.random() * 20) + 10;
     this.health += recoveryAmount;
-    this.stamina += 10; 
-    await typeText(chalk.bgCyan(`${this.name} has recovered ${recoveryAmount} health and gained 10 stamina!\n`));
-    if (this.health > 100) this.health = 100; 
-    if (this.stamina > 100) this.stamina = 100; 
+    this.stamina += 10;
+    await typeText(
+      chalk.bgCyan(
+        `${this.name} has recovered ${recoveryAmount} health and gained 10 stamina!\n`
+      )
+    );
+    if (this.health > 100) this.health = 100;
+    if (this.stamina > 100) this.stamina = 100;
   }
 
   async recoverStamina(): Promise<void> {
-    const recoveryAmount = Math.floor(Math.random() * 7) + 3; 
+    const recoveryAmount = Math.floor(Math.random() * 7) + 3;
     this.stamina += recoveryAmount;
-    await typeText(chalk.bgMagenta(`${this.name} has recovered ${recoveryAmount} stamina!\n`));
+    await typeText(
+      chalk.bgMagenta(`${this.name} has recovered ${recoveryAmount} stamina!\n`)
+    );
     if (this.stamina > 100) {
-      this.stamina = 100; 
+      this.stamina = 100;
     }
   }
 
@@ -131,18 +179,24 @@ export class Fighter {
   }
 
   setAttack(attacks: Record<string, Attack>): void {
-    this.attacks = attacks; 
+    this.attacks = attacks;
   }
 
   async useAttack(name: string, target: Fighter): Promise<void> {
     const attack = this.attacks?.[name];
     if (!attack) {
-      await typeText(chalk.bgRed(`${this.name} does not know an attack called "${name}"!\n`));
+      await typeText(
+        chalk.bgRed(`${this.name} does not know an attack called "${name}"!\n`)
+      );
       return;
     }
 
     if (attack.staminaCost && this.stamina < attack.staminaCost) {
-      await typeText(chalk.bgRed(`${this.name} does not have enough stamina to use "${attack.name}"!\n`))
+      await typeText(
+        chalk.bgRed(
+          `${this.name} does not have enough stamina to use "${attack.name}"!\n`
+        )
+      );
       return;
     }
     if (attack.staminaCost) this.stamina -= attack.staminaCost;
@@ -151,5 +205,9 @@ export class Fighter {
 
   getAttackNames(): Attack[] {
     return Object.values(this.attacks);
+  }
+
+  breakGuard(target: Fighter): void {
+    target.isBlocking = false;
   }
 }

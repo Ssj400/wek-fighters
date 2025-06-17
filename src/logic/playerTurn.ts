@@ -1,13 +1,18 @@
-import readlineSync from 'readline-sync';
-import { Fighter } from '../classes/Fighter';
+import readlineSync from "readline-sync";
+import { Fighter } from "../classes/Fighter";
 import { typeText } from "../utils/typeText";
-import { chooseAttack } from './chooseAttack';
+import { chooseAttack } from "./chooseAttack";
 
-export async function playerTurn(player: Fighter, opponent: Fighter): Promise<void> {
+export async function playerTurn(
+  player: Fighter,
+  opponent: Fighter
+): Promise<void> {
   await typeText(`\n${player.name}'s turn!`);
 
-  await typeText('Choose an action: \n1.Normal Attack\n2.Block\n3.Recover\n4.Stats\n5.Special\n');
-  const action = readlineSync.question('> ');
+  await typeText(
+    "Choose an action: \n1.Normal Attack\n2.Block\n3.Recover\n4.Stats\n5.Special\n"
+  );
+  const action = readlineSync.question("> ");
 
   if (action === "1") {
     await player.normalAttack(opponent);
@@ -18,11 +23,11 @@ export async function playerTurn(player: Fighter, opponent: Fighter): Promise<vo
   } else if (action === "4") {
     await player.getStats();
     await opponent.getStats();
-    await playerTurn(player, opponent); 
+    await playerTurn(player, opponent);
   } else if (action == "5") {
     await chooseAttack(player, opponent);
   } else {
-    await typeText('Invalid action. Please choose 1 or 2.');
-    await playerTurn(player, opponent); 
+    await typeText("Invalid action. Please choose 1 or 2.");
+    await playerTurn(player, opponent);
   }
 }
