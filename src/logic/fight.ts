@@ -11,11 +11,11 @@ export async function fight(fighter1: Fighter, fighter2: Fighter): Promise<void>
   await fighter1.getStats();
   await fighter2.getStats();
 
-  while (fighter1.health > 0 && fighter2.health > 0) {
+  while (fighter1.getHealth() > 0 && fighter2.getHealth() > 0) {
     if (!validateLife(fighter1)) break;
     if (!validateLife(fighter2)) break;
 
-    if (fighter1.speed > fighter2.speed) {
+    if (fighter1.getSpeed() > fighter2.getSpeed()) {
       await typeText(chalk.bgBlue.bold(`${fighter1.name} is faster, he attacks first!\n`));
       
       await playerTurn(fighter1, fighter2);
@@ -23,7 +23,7 @@ export async function fight(fighter1: Fighter, fighter2: Fighter): Promise<void>
       await cpuTurn(fighter2, fighter1);
       if (!validateLife(fighter1)) break;
 
-    } else if (fighter2.speed > fighter1.speed) {
+    } else if (fighter2.getSpeed() > fighter1.getSpeed()) {
       await typeText(chalk.bgBlue.bold(`${fighter2.name} is faster, attacks first!\n`));
       
       await cpuTurn(fighter2, fighter1);

@@ -2,14 +2,14 @@ import chalk from "chalk";
 import { typeText } from "../utils/typeText.js";
 
 export class Fighter {
-  name: string;
-  health: number;
-  strength: number;
-  speed: number;
-  stamina: number;
-  blockFail: number;
-  isBlocking: boolean;
-  rageSuceptibility: boolean;
+  public readonly name: string;
+  protected health: number;
+  protected strength: number;
+  protected speed: number;
+  protected stamina: number;
+  protected blockFail: number;
+  protected isBlocking: boolean;
+  protected rageSuceptibility: boolean;
   constructor(name: string, health: number, strength: number, speed: number, blockFail: number = 0, isBlocking: boolean = false, rageSuceptibility: boolean = false) {
     this.name = name;
     this.health = health;
@@ -104,11 +104,27 @@ export class Fighter {
     }
   }
 
+  getHealth(): number {
+    return this.health;
+  }
+
+  getSpeed(): number {
+    return this.speed;
+  }
+
+  getBlockFail(): number {
+    return this.blockFail;
+  }
+
   checkIfTired(): boolean {
     return this.stamina <= 15;
   }
 
   rageMode(): boolean {
     return this.health <= 35 && this.stamina > 20 && this.rageSuceptibility;
+  }
+
+  isCurrentlyBlocking(): boolean {
+    return this.isBlocking;
   }
 }

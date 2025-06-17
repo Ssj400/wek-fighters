@@ -34,7 +34,7 @@ export class Puncher extends Fighter {
     this.isBlocking = false;
 
 
-  if (target.isBlocking) {
+  if (target.isCurrentlyBlocking()) {
       await typeText(chalk.bgGreen(`${target.name} successfully blocked the attack!\n`));
   } else {
     await typeText(chalk.bgRed(`${target.name} failed to block the attack!\n`));
