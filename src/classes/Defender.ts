@@ -35,6 +35,10 @@ export class Defender extends Fighter {
     );
   }
 
+   override getFighterClass(): string {
+    return 'Defender';
+  }
+
   override async receiveDamage(
     damage: number,
     oponent: Fighter
@@ -55,6 +59,11 @@ export class Defender extends Fighter {
         chalk.bgRed(`${this.name} completely receives the attack! \n`)
       );
       this.health -= damage * 1.2;
+      await typeText(
+        chalk.bgRed(
+          `${this.name} has received ${(damage * 1.2).toFixed(2)} damage!\n`
+        )
+      );
     } else {
       const reducedDamage = Math.max(0, damage - this.defense);
       this.defense = Math.max(0, this.defense - Math.floor(this.defense * 0.2));

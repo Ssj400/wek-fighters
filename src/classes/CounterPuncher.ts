@@ -15,6 +15,9 @@ export class CounterPuncher extends Fighter {
       await typeText(chalk.bgGreen(`Statistics | fighter: ${this.name}, health: ${this.health}, strength: ${this.strength}, stamina: ${this.stamina} *SPECIAL* CounterIndex: ${this.counterIndex}, speed: ${this.speed}\n`), 1);
     }
 
+    override getFighterClass(): string {
+    return 'CounterPuncher';
+  }
 
   override async receiveDamage(damage: number, oponent: Fighter): Promise<void> {
     if (this.stamina < 30) {

@@ -40,6 +40,58 @@ export class Fighter {
     );
   }
 
+  setAttack(attacks: Record<string, Attack>): void {
+    this.attacks = attacks;
+  }
+
+  async useAttack(name: string, target: Fighter): Promise<void> {
+    const attack = this.attacks?.[name];
+    if (!attack) {
+      await typeText(
+        chalk.bgRed(`${this.name} does not know an attack called "${name}"!\n`)
+      );
+      return;
+    }
+
+    if (attack.staminaCost && this.stamina < attack.staminaCost) {
+      await typeText(
+        chalk.bgRed(
+          `${this.name} does not have enough stamina to use "${attack.name}"!\n`
+        )
+      );
+      return;
+    } 
+
+    if (this.rageMode()) {
+      await typeText(
+        chalk.bgRed(`${this.name} is getting angry and attacks with rage!\n`)
+      );
+      this.rageSuceptibility = false;
+      await typeText(
+        chalk.bgRed.bold(
+          `${this.name} attacks ${target.name} two times because of his lack of control!\n`
+        )
+      );
+      await this.useAttack(name,  target);
+      await this.useAttack(name,  target);
+      this.stamina = 0;
+      await typeText(
+        chalk.bgRed.bold(`${this.name} is getting tired after rage!\n`)
+      );
+
+      return;
+    }
+
+    
+    if (attack.staminaCost) this.stamina -= attack.staminaCost;
+    await attack.execute(this, target);
+    this.isBlocking = false;
+  }
+
+  getAttackNames(): Attack[] {
+    return Object.values(this.attacks);
+  }
+
   async normalAttack(target: Fighter): Promise<void> {
     if (this.checkIfTired()) {
       await typeText(
@@ -171,43 +223,18 @@ export class Fighter {
   }
 
   rageMode(): boolean {
-    return this.health <= 35 && this.stamina > 20 && this.rageSuceptibility;
+    return this.health <= 30 && this.stamina > 20 && this.rageSuceptibility;
   }
 
   isCurrentlyBlocking(): boolean {
     return this.isBlocking;
   }
 
-  setAttack(attacks: Record<string, Attack>): void {
-    this.attacks = attacks;
-  }
-
-  async useAttack(name: string, target: Fighter): Promise<void> {
-    const attack = this.attacks?.[name];
-    if (!attack) {
-      await typeText(
-        chalk.bgRed(`${this.name} does not know an attack called "${name}"!\n`)
-      );
-      return;
-    }
-
-    if (attack.staminaCost && this.stamina < attack.staminaCost) {
-      await typeText(
-        chalk.bgRed(
-          `${this.name} does not have enough stamina to use "${attack.name}"!\n`
-        )
-      );
-      return;
-    }
-    if (attack.staminaCost) this.stamina -= attack.staminaCost;
-    await attack.execute(this, target);
-  }
-
-  getAttackNames(): Attack[] {
-    return Object.values(this.attacks);
-  }
-
   breakGuard(target: Fighter): void {
     target.isBlocking = false;
+  }
+
+    getFighterClass(): string {
+    return 'Fighter';
   }
 }

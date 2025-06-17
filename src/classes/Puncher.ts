@@ -14,6 +14,10 @@ export class Puncher extends Fighter {
     await typeText(chalk.bgGreen(`Statistics | fighter: ${this.name}, health: ${this.health}, strength: ${this.strength}, stamina: ${this.stamina} *SPECIAL* Multiplicator: ${this.damageMultiplicator}, speed: ${this.speed}\n`), 1);
   }
 
+   override getFighterClass(): string {
+    return 'Puncher';
+  }
+
   override async normalAttack(target: Fighter): Promise<void> {
   if (this.checkIfTired()) {
     await typeText(chalk.bgRed(`${this.name} does not have enough stamina to attack!\n`));

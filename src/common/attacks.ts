@@ -5,11 +5,13 @@ import { sleep } from "../utils/sleep";
 import { Puncher } from "../classes/Puncher";
 import { calculateCrit } from "../utils/crit";
 
+type FighterClass = 'Puncher' | "CounterPuncher" | "Fighter" | string;
 export interface Attack {
     name: string;
     staminaCost?: number;
     description: string;
     criticChance: number;
+    classDamageModifiers?:  Record<FighterClass, number>;
     execute: (attacker: Fighter, target: Fighter) => Promise<void>;
 }
 
@@ -18,10 +20,15 @@ export const jab: Attack = {
         staminaCost: 10,
         criticChance: 0.2,
         description: "A quick, powerful strike. *SPECIAL* Breaks opponent guard.\n",
+         classDamageModifiers: {
+            Puncher: 1.3,
+        },
         execute: async (attacker, target) => {
         await typeText(`${attacker.name} jabs!\n`);
         attacker.breakGuard(target);
-        let damage = await calculateCrit(10, jab.criticChance)
+        let basedamage = await calculateCrit(10, jab.criticChance)
+        const modifier = jab.classDamageModifiers?.[attacker.getFighterClass()] ?? 1;
+        const damage = basedamage * modifier;
        
         await typeText(`${attacker.name} jab gets through ${target.name}'s guard!\n`);
         await target.receiveDamage(damage, attacker);
@@ -66,12 +73,15 @@ export const sabuesoKiller: Attack = {
     staminaCost: 30,
     criticChance: 0.1,
     description: "Baby tank's created this move during his first fight with Sabueso. If mastered, it is devastating against uncontrolled punchers. *SPECIAL* Super effective against punchers.\n",
+    classDamageModifiers: {
+        Puncher: 1.5,
+    },
     execute: async (attacker, target) => {
         await typeText(`${attacker.name} rolls and throws the Sabueso Killer!`);
 
-        let damage = await calculateCrit(10, sabuesoKiller.criticChance)
+        let damage = await calculateCrit(15, sabuesoKiller.criticChance)
 
-        if (target instanceof Puncher) {
+        if (target.getFighterClass() === "Puncher") {
             await typeText(`${target.name} is a puncher, the attack is super effective!\n`);
             await target.receiveDamage(damage + 15, attacker);
         } else {
@@ -85,10 +95,13 @@ export const rightOverhand: Attack = {
     staminaCost: 25,
     criticChance: 0.15,
     description: "A powerful right hand that takes counter punchers by surprise because it comes from who knows where. *SPECIAL* Super effective against counter punchers",
+    classDamageModifiers: {
+        Puncher: 1.5,
+    },
     execute: async (attacker, target) => {
         await typeText(`${attacker.name} throws a powerful right overhand!!!\n`);
-        let damage = await calculateCrit(30, rightOverhand.criticChance)
-        if (target instanceof CounterPuncher) {
+        let damage = await calculateCrit(20, rightOverhand.criticChance)
+        if (target.getFighterClass() === "CounterPuncher") {
             await typeText(`${target.name} is a Counter Puncher, the attack is super efective!\n`);
             await target.receiveDamage(damage + 15, attacker);
         } else {
