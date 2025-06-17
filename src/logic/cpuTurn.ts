@@ -13,6 +13,6 @@ export async function cpuTurn(cpu: Fighter, player: Fighter): Promise<void> {
   } else if (shouldRecover) {
     await cpu.recoverHealth();
   } else {
-    await cpu.attack(player);
+    await cpu.normalAttack(player);
   }
 }

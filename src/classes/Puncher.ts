@@ -14,7 +14,7 @@ export class Puncher extends Fighter {
     await typeText(chalk.bgGreen(`Statistics | fighter: ${this.name}, health: ${this.health}, strength: ${this.strength}, stamina: ${this.stamina} *SPECIAL* Multiplicator: ${this.damageMultiplicator}, speed: ${this.speed}\n`), 1);
   }
 
-  override async attack(target: Fighter): Promise<void> {
+  override async normalAttack(target: Fighter): Promise<void> {
   if (this.checkIfTired()) {
     await typeText(chalk.bgRed(`${this.name} does not have enough stamina to attack!\n`));
     return;
@@ -22,8 +22,8 @@ export class Puncher extends Fighter {
       await typeText(chalk.bgRed(`${this.name} is getting angry and attacks with rage!\n`));
       this.rageSuceptibility = false;
       await typeText(chalk.bgRed.bold(`${this.name} attacks ${target.name} two times because of his lack of control!\n`));
-      await this.attack(target);
-      await this.attack(target);
+      await this.normalAttack(target);
+      await this.normalAttack(target);
       this.stamina = 0;
       await typeText(chalk.bgRed.bold(`${this.name} is getting tired after rage!\n`));
       return;
