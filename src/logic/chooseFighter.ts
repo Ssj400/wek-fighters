@@ -1,9 +1,9 @@
 import { Fighter } from "../classes/Fighter";
 import { typeText } from "../utils/typeText";
-import readlineSync from 'readline-sync';
+import readlineSync from "readline-sync";
 
 export async function chooseFighter(fighters: Fighter[]): Promise<Fighter[]> {
-  let fightersChosen: Fighter[] = [];
+  const fightersChosen: Fighter[] = [];
 
   await typeText("Choose your fighter:\n");
 
@@ -14,10 +14,14 @@ export async function chooseFighter(fighters: Fighter[]): Promise<Fighter[]> {
   }
 
   await typeText("Enter the number of your fighter: ");
-  const choice = readlineSync.question('> ');
-  if (isNaN(parseInt(choice)) || parseInt(choice) < 1 || parseInt(choice) > fighters.length) {
+  const choice = readlineSync.question("> ");
+  if (
+    isNaN(parseInt(choice)) ||
+    parseInt(choice) < 1 ||
+    parseInt(choice) > fighters.length
+  ) {
     await typeText("Invalid choice. Please enter a valid number.\n");
-    return chooseFighter(fighters); 
+    return chooseFighter(fighters);
   }
   const fighterIndex = parseInt(choice) - 1;
 
@@ -34,10 +38,14 @@ export async function chooseFighter(fighters: Fighter[]): Promise<Fighter[]> {
   }
 
   await typeText("Enter the number of your opponent: ");
-  const opponentChoice = readlineSync.question('> ');
-  if (isNaN(parseInt(opponentChoice)) || parseInt(opponentChoice) < 1 || parseInt(opponentChoice) > fighters.length ) {
+  const opponentChoice = readlineSync.question("> ");
+  if (
+    isNaN(parseInt(opponentChoice)) ||
+    parseInt(opponentChoice) < 1 ||
+    parseInt(opponentChoice) > fighters.length
+  ) {
     await typeText("Invalid choice. Please enter a valid number.\n");
-    return chooseFighter(fighters); 
+    return chooseFighter(fighters);
   }
   const opponentIndex = parseInt(opponentChoice) - 1;
 

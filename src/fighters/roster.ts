@@ -13,20 +13,20 @@ import {
 
 export const jefte = new Defender("inca", 100, 35, 10, 0, false, 10);
 jefte.setAttack({
-  "Jab": jab,
+  Jab: jab,
   "Llama Left Hook": llamaLeftHook,
 });
 
 export const mati = new Puncher("theBeast", 100, 30, 10, 0, false, 1.2, true);
 mati.setAttack({
-  "Jab": jab,
+  Jab: jab,
   "Right Overhand": rightOverhand,
   "Divine Uppercut": divineUppercut,
 });
 
 export const alan = new Puncher("babyTank", 100, 20, 20, 0, false, 1.5);
 alan.setAttack({
-  "Jab": jab,
+  Jab: jab,
   "Sabueso Killer": sabuesoKiller,
 });
 
@@ -37,10 +37,10 @@ export const juan = new CounterPuncher(
   50,
   0,
   false,
-  0.7
+  0.7,
 );
 juan.setAttack({
-  "Jab": jab,
+  Jab: jab,
   "Strong Cross": strongCross,
 });
 

@@ -13,6 +13,9 @@ export async function cpuTurn(cpu: Fighter, player: Fighter): Promise<void> {
   } else if (shouldRecover) {
     await cpu.recoverHealth();
   } else {
-    await cpu.useAttack(attackNames[Math.floor(Math.random() * attackNames.length)].name, player);
+    await cpu.useAttack(
+      attackNames[Math.floor(Math.random() * attackNames.length)].name,
+      player,
+    );
   }
 }

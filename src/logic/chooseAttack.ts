@@ -5,7 +5,7 @@ import { playerTurn } from "./playerTurn";
 
 export async function chooseAttack(
   player: Fighter,
-  opponent: Fighter
+  opponent: Fighter,
 ): Promise<void> {
   const attackNames = Object.values(player.getAttackNames());
   if (attackNames.length === 0) {
@@ -19,7 +19,7 @@ export async function chooseAttack(
     console.log(
       `${index + 1}.${atk.name}: ${atk.description} (Cost: ${
         atk.staminaCost
-      })\n`
+      })\n`,
     );
   });
 

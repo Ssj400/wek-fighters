@@ -5,13 +5,11 @@ import { chooseAttack } from "./chooseAttack";
 
 export async function playerTurn(
   player: Fighter,
-  opponent: Fighter
+  opponent: Fighter,
 ): Promise<void> {
   await typeText(`\n${player.name}'s turn!`);
 
-  await typeText(
-    "Choose an action: \n1.Attack\n2.Block\n3.Recover\n4.Stats\n"
-  );
+  await typeText("Choose an action: \n1.Attack\n2.Block\n3.Recover\n4.Stats\n");
   const action = readlineSync.question("> ");
 
   if (action === "1") {

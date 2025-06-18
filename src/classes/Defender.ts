@@ -13,7 +13,7 @@ export class Defender extends Fighter {
     blockFail: number = 0,
     isBlocking: boolean = false,
     defense: number,
-    rageSuceptibility: boolean = false
+    rageSuceptibility: boolean = false,
   ) {
     super(
       name,
@@ -22,47 +22,45 @@ export class Defender extends Fighter {
       speed,
       blockFail,
       isBlocking,
-      rageSuceptibility
+      rageSuceptibility,
     );
     this.defense = defense;
   }
   override async getStats(): Promise<void> {
     await typeText(
       chalk.bgGreen(
-        `Statistics | fighter: ${this.name}, health: ${this.health}, strength: ${this.strength}, stamina: ${this.stamina} *SPECIAL* defense: ${this.defense}, speed: ${this.speed}\n`
+        `Statistics | fighter: ${this.name}, health: ${this.health}, strength: ${this.strength}, stamina: ${this.stamina} *SPECIAL* defense: ${this.defense}, speed: ${this.speed}\n`,
       ),
-      1
+      1,
     );
   }
 
-   override getFighterClass(): string {
-    return 'Defender';
+  override getFighterClass(): string {
+    return "Defender";
   }
 
   override async receiveDamage(
     damage: number,
-    oponent: Fighter
+    oponent: Fighter,
   ): Promise<void> {
     if (this.isCurrentlyBlocking()) {
       await typeText(
-      chalk.bgGreen(`${this.name} successfully blocked the attack!\n`)
-    );
-    return;
-  }
+        chalk.bgGreen(`${this.name} successfully blocked the attack!\n`),
+      );
+      return;
+    }
 
-  await typeText(
-      chalk.bgRed(`${this.name} failed to block the attack!\n`)
-    );
-  
+    await typeText(chalk.bgRed(`${this.name} failed to block the attack!\n`));
+
     if (this.stamina < 30) {
       await typeText(
-        chalk.bgRed(`${this.name} completely receives the attack! \n`)
+        chalk.bgRed(`${this.name} completely receives the attack! \n`),
       );
       this.health -= damage * 1.2;
       await typeText(
         chalk.bgRed(
-          `${this.name} has received ${(damage * 1.2).toFixed(2)} damage!\n`
-        )
+          `${this.name} has received ${(damage * 1.2).toFixed(2)} damage!\n`,
+        ),
       );
     } else {
       const reducedDamage = Math.max(0, damage - this.defense);
@@ -71,12 +69,12 @@ export class Defender extends Fighter {
       await typeText(
         chalk.bgMagenta(
           `${this.name} has received ${reducedDamage.toFixed(
-            2
-          )} damage after defense!\n`
-        )
+            2,
+          )} damage after defense!\n`,
+        ),
       );
       await typeText(
-        chalk.bgCyanBright(`${this.name}'s defense is now ${this.defense}\n`)
+        chalk.bgCyanBright(`${this.name}'s defense is now ${this.defense}\n`),
       );
       this.stamina -= 10;
     }
@@ -87,7 +85,7 @@ export class Defender extends Fighter {
       return;
     } else {
       await typeText(
-        chalk.bgGreen(`${this.name}'s health is now ${this.health}\n`)
+        chalk.bgGreen(`${this.name}'s health is now ${this.health}\n`),
       );
     }
   }
