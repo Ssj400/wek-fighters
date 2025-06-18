@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import { typeText } from "../utils/typeText";
 import { Attack } from "../common/attacks";
+import { validateLife } from "../logic/validateLife";
 export class Fighter {
   public readonly name: string;
   protected health: number;
@@ -73,7 +74,9 @@ export class Fighter {
         )
       );
       await this.useAttack(name,  target);
+      if (!validateLife(this)) return;
       await this.useAttack(name,  target);
+      if (!validateLife(this)) return;
       this.stamina = 0;
       await typeText(
         chalk.bgRed.bold(`${this.name} is getting tired after rage!\n`)
@@ -92,42 +95,8 @@ export class Fighter {
     return Object.values(this.attacks);
   }
 
-  async normalAttack(target: Fighter): Promise<void> {
-    if (this.checkIfTired()) {
-      await typeText(
-        chalk.bgRed(`${this.name} does not have enough stamina to attack!\n`)
-      );
-      return;
-    } else if (this.rageMode()) {
-      await typeText(
-        chalk.bgRed(`${this.name} is getting angry and attacks with rage!\n`)
-      );
-      this.rageSuceptibility = false;
-      await typeText(
-        chalk.bgRed.bold(
-          `${this.name} attacks ${target.name} two times because of his lack of control!\n`
-        )
-      );
-      await this.normalAttack(target);
-      await this.normalAttack(target);
-      this.stamina = 0;
-      await typeText(
-        chalk.bgRed.bold(`${this.name} is getting tired after rage!\n`)
-      );
-      return;
-    }
-
-    const damage = Math.floor(
-      this.strength / 3 + (this.stamina / 10) * (0.8 + Math.random() * 0.4)
-    );
-
-    await typeText(
-      chalk.bgBlue.bold(`${this.name} has attacked ${target.name}!\n`)
-    );
-
-    this.isBlocking = false;
-    this.stamina -= 20;
-    await target.receiveDamage(damage, this);
+  getStrength(): number {
+    return this.strength;
   }
 
   async receiveDamage(damage: number, oponent: Fighter): Promise<void> {

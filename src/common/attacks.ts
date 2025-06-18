@@ -43,7 +43,7 @@ export const jab: Attack = {
   execute: async (attacker, target) => {
     await typeText(`${attacker.name} jabs!\n`);
     attacker.breakGuard(target);
-    let damage = await calculateCrit(10, jab.criticChance);
+    let damage = await calculateCrit(10 * (attacker.getStrength() / 100 + 1), jab.criticChance);
     damage = await applyClassModifiers(damage, attacker, target, jab);
 
     await typeText(
@@ -60,7 +60,7 @@ export const strongCross: Attack = {
   description: "A powerful right hand.\n",
   execute: async (attacker, target) => {
     await typeText(`${attacker.name} throws a strong cross!`);
-    let damage = await calculateCrit(25, strongCross.criticChance);
+    let damage = await calculateCrit(25 * (attacker.getStrength() / 100 + 1), strongCross.criticChance);
     damage = await applyClassModifiers(damage, attacker, target, strongCross);
     await target.receiveDamage(damage, attacker);
   },
@@ -104,7 +104,7 @@ export const sabuesoKiller: Attack = {
   },
   execute: async (attacker, target) => {
     await typeText(`${attacker.name} rolls and throws the Sabueso Killer!`);
-    let damage = await calculateCrit(15, sabuesoKiller.criticChance);
+    let damage = await calculateCrit(15 * (attacker.getStrength() / 100 + 1), sabuesoKiller.criticChance);
     damage = await applyClassModifiers(damage, attacker, target, sabuesoKiller);
     await target.receiveDamage(damage, attacker);
   },
@@ -124,7 +124,7 @@ export const rightOverhand: Attack = {
   },
   execute: async (attacker, target) => {
     await typeText(`${attacker.name} throws a powerful right overhand!!!\n`);
-    let damage = await calculateCrit(20, rightOverhand.criticChance);
+    let damage = await calculateCrit(20 * (attacker.getStrength() / 100 + 1), rightOverhand.criticChance);
     damage = await applyClassModifiers(damage, attacker, target, rightOverhand);
     await target.receiveDamage(damage, attacker);
   },
@@ -141,7 +141,7 @@ export const llamaLeftHook: Attack = {
     await sleep(2000);
     await typeText(`A llama sound vibrates the ring!!\n`);
     await sleep(1000);
-    let damage = await calculateCrit(20, llamaLeftHook.criticChance);
+    let damage = await calculateCrit(20 * (attacker.getStrength() / 100 + 1), llamaLeftHook.criticChance);
     damage = await applyClassModifiers(damage, attacker, target, llamaLeftHook);
     await target.receiveDamage(damage, attacker);
   },

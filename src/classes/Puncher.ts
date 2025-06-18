@@ -18,25 +18,4 @@ export class Puncher extends Fighter {
     return 'Puncher';
   }
 
-  override async normalAttack(target: Fighter): Promise<void> {
-  if (this.checkIfTired()) {
-    await typeText(chalk.bgRed(`${this.name} does not have enough stamina to attack!\n`));
-    return;
-  } else if (this.rageMode()) {
-      await typeText(chalk.bgRed(`${this.name} is getting angry and attacks with rage!\n`));
-      this.rageSuceptibility = false;
-      await typeText(chalk.bgRed.bold(`${this.name} attacks ${target.name} two times because of his lack of control!\n`));
-      await this.normalAttack(target);
-      await this.normalAttack(target);
-      this.stamina = 0;
-      await typeText(chalk.bgRed.bold(`${this.name} is getting tired after rage!\n`));
-      return;
-  } 
-    this.stamina -= 10; 
-    const damage = (Math.floor(this.strength / 3 + this.stamina / 10  * (0.8 + Math.random() * 0.4)) * this.damageMultiplicator);
-    await typeText(chalk.bgGray.bold(`${this.name} has attacked ${target.name}!\n`));
-    this.isBlocking = false;
-
-    await target.receiveDamage(damage, this);
-  }
 }

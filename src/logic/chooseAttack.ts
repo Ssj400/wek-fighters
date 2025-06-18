@@ -9,11 +9,11 @@ export async function chooseAttack(
 ): Promise<void> {
   const attackNames = Object.values(player.getAttackNames());
   if (attackNames.length === 0) {
-    await typeText("This fighter has no special attacks!\n");
+    await typeText("This fighter has no attacks!\n");
     return await playerTurn(player, opponent);
   }
 
-  await typeText("Choose a special attack or type 0 to cancel:\n");
+  await typeText("Choose an attack or type 0 to cancel:\n");
 
   attackNames.forEach((atk, index) => {
     console.log(
