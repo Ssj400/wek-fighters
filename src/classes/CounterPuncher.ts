@@ -46,6 +46,17 @@ export class CounterPuncher extends Fighter {
     damage: number,
     oponent: Fighter,
   ): Promise<void> {
+    if (this.isCurrentlyBlocking()) {
+      await typeText(
+        chalk.bgGreen(`${this.name} successfully blocked the attack!\n`),
+      );
+      return;
+    } else if (await this.dodgeAttack()) {
+      oponent.updateVulnerabilityIndex(0.05);
+      oponent.updateStamina(-5);
+      return;
+    }
+
     if (this.stamina < 30) {
       await typeText(
         chalk.bgRed(`${this.name} completely receives the attack! \n`),

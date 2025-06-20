@@ -107,8 +107,11 @@ export class Fighter {
         chalk.bgGreen(`${this.name} successfully blocked the attack!\n`),
       );
       return;
+    } else if (await this.dodgeAttack()) {
+      oponent.updateVulnerabilityIndex(0.05);
+      oponent.updateStamina(-5);
+      return;
     }
-
     await typeText(chalk.bgRed(`${this.name} failed to block the attack!\n`));
 
     if (this.stamina < 30) {
@@ -177,6 +180,24 @@ export class Fighter {
     if (this.stamina > 100) {
       this.stamina = 100;
     }
+  }
+
+  async dodgeAttack(chancePotenciator: number = 0): Promise<boolean> {
+    const fatiguePenalty = this.stamina < 30 ? -0.1 : 0;
+    const chance = Math.min(
+      0.6,
+      chancePotenciator + this.speed / 100 + fatiguePenalty,
+    );
+    if (Math.random() < chance) {
+      await typeText(chalk.bgWhite(`${this.name} dodged the attack!!!\n`));
+      return true;
+    }
+    return false;
+  }
+
+  updateStamina(update: number): void {
+    this.stamina += update;
+    return;
   }
 
   getHealth(): number {

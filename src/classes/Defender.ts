@@ -50,6 +50,10 @@ export class Defender extends Fighter {
         chalk.bgGreen(`${this.name} successfully blocked the attack!\n`),
       );
       return;
+    } else if (await this.dodgeAttack()) {
+      oponent.updateVulnerabilityIndex(0.05);
+      oponent.updateStamina(-5);
+      return;
     }
 
     await typeText(chalk.bgRed(`${this.name} failed to block the attack!\n`));
@@ -59,6 +63,7 @@ export class Defender extends Fighter {
         chalk.bgRed(`${this.name} completely receives the attack! \n`),
       );
       this.health -= damage * 1.2 * this.vulnerabilityIndex + 0.3;
+      this.defense = Math.max(this.defense - 2, 0);
       await typeText(
         chalk.bgRed(
           `${this.name} has received ${(damage * 1.2 * this.vulnerabilityIndex + 0.3).toFixed(2)} damage!\n`,
@@ -66,18 +71,19 @@ export class Defender extends Fighter {
       );
     } else {
       const reducedDamage = Math.max(0, damage - this.defense);
-      this.defense = this.defense - 2;
+      this.defense = Math.max(this.defense - 1, 0);
       this.health -= reducedDamage * this.vulnerabilityIndex + 0.3;
       await typeText(
         chalk.bgMagenta(
           `${this.name} has received ${(reducedDamage * this.vulnerabilityIndex + 0.3).toFixed(2)} damage after defense!\n`,
         ),
       );
-      await typeText(
-        chalk.bgCyanBright(`${this.name}'s defense is now ${this.defense}\n`),
-      );
       this.stamina -= 10;
     }
+
+    await typeText(
+      chalk.bgCyanBright(`${this.name}'s defense is now ${this.defense}\n`),
+    );
 
     if (this.health <= 0) {
       this.health = 0;
