@@ -14,6 +14,7 @@ export class Puncher extends Fighter {
     isBlocking: boolean = false,
     damageMultiplicator: number,
     rageSuceptibility: boolean = false,
+    vulnerabilityIndex: number = 0.8,
   ) {
     super(
       name,
@@ -23,6 +24,7 @@ export class Puncher extends Fighter {
       blockFail,
       isBlocking,
       rageSuceptibility,
+      vulnerabilityIndex,
     );
     this.damageMultiplicator = damageMultiplicator;
   }

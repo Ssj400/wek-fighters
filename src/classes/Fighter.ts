@@ -12,6 +12,7 @@ export class Fighter {
   protected isBlocking: boolean;
   protected rageSuceptibility: boolean;
   protected attacks: Record<string, Attack> = {};
+  protected vulnerabilityIndex: number;
 
   constructor(
     name: string,
@@ -21,6 +22,7 @@ export class Fighter {
     blockFail: number = 0,
     isBlocking: boolean = false,
     rageSuceptibility: boolean = false,
+    vulnerabilityIndex: number = 0.7,
   ) {
     this.name = name;
     this.health = health;
@@ -30,6 +32,7 @@ export class Fighter {
     this.isBlocking = isBlocking;
     this.stamina = 100;
     this.rageSuceptibility = rageSuceptibility;
+    this.vulnerabilityIndex = vulnerabilityIndex;
   }
 
   async getStats(): Promise<void> {
@@ -112,16 +115,18 @@ export class Fighter {
       await typeText(
         chalk.bgRed(`${this.name} completely receives the attack! \n`),
       );
-      this.health -= damage * 1.2;
+      this.health -= damage * 1.2 * this.vulnerabilityIndex;
       await typeText(
         chalk.bgRed(
-          `${this.name} has received ${(damage * 1.2).toFixed(2)} damage!\n`,
+          `${this.name} has received ${(damage * 1.2 * this.vulnerabilityIndex).toFixed(2)} damage!\n`,
         ),
       );
     } else {
-      this.health -= damage;
+      this.health -= damage * this.vulnerabilityIndex;
       await typeText(
-        chalk.bgRed(`${this.name} has received ${damage.toFixed(2)} damage!\n`),
+        chalk.bgRed(
+          `${this.name} has received ${(damage * this.vulnerabilityIndex).toFixed(2)} damage!\n`,
+        ),
       );
     }
 
@@ -204,5 +209,9 @@ export class Fighter {
 
   getFighterClass(): string {
     return "Fighter";
+  }
+
+  updateVulnerabilityIndex(sum: number): void {
+    this.vulnerabilityIndex += sum;
   }
 }

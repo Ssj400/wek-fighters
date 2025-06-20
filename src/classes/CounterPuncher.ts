@@ -14,6 +14,7 @@ export class CounterPuncher extends Fighter {
     isBlocking: boolean = false,
     counterIndex: number,
     rageSuceptibility: boolean = false,
+    vulnerabilityIndex: number = 0.8,
   ) {
     super(
       name,
@@ -23,6 +24,7 @@ export class CounterPuncher extends Fighter {
       blockFail,
       isBlocking,
       rageSuceptibility,
+      vulnerabilityIndex,
     );
     this.counterIndex = counterIndex;
   }
@@ -48,11 +50,13 @@ export class CounterPuncher extends Fighter {
       await typeText(
         chalk.bgRed(`${this.name} completely receives the attack! \n`),
       );
-      this.health -= damage * 1.2;
+      this.health -= damage * 1.2 * this.vulnerabilityIndex;
     } else {
-      this.health -= damage;
+      this.health -= damage * this.vulnerabilityIndex;
       await typeText(
-        chalk.bgRed(`${this.name} has received ${damage.toFixed(2)} damage!\n`),
+        chalk.bgRed(
+          `${this.name} has received ${(damage * this.vulnerabilityIndex).toFixed(2)} damage!\n`,
+        ),
       );
     }
 
@@ -66,7 +70,10 @@ export class CounterPuncher extends Fighter {
           `${this.name} has counter punched ${oponent.name}!\n`,
         ),
       );
-      await oponent.receiveDamage(this.strength * 3, this);
+      await oponent.receiveDamage(
+        this.strength * 3 * this.vulnerabilityIndex,
+        this,
+      );
       this.counterIndex -= 0.1;
       this.stamina -= 10;
     }

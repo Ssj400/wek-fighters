@@ -14,6 +14,7 @@ export class Defender extends Fighter {
     isBlocking: boolean = false,
     defense: number,
     rageSuceptibility: boolean = false,
+    vulnerabilityIndex: number = 0.65,
   ) {
     super(
       name,
@@ -23,6 +24,7 @@ export class Defender extends Fighter {
       blockFail,
       isBlocking,
       rageSuceptibility,
+      vulnerabilityIndex,
     );
     this.defense = defense;
   }
@@ -56,21 +58,19 @@ export class Defender extends Fighter {
       await typeText(
         chalk.bgRed(`${this.name} completely receives the attack! \n`),
       );
-      this.health -= damage * 1.2;
+      this.health -= damage * 1.2 * this.vulnerabilityIndex + 0.3;
       await typeText(
         chalk.bgRed(
-          `${this.name} has received ${(damage * 1.2).toFixed(2)} damage!\n`,
+          `${this.name} has received ${(damage * 1.2 * this.vulnerabilityIndex + 0.3).toFixed(2)} damage!\n`,
         ),
       );
     } else {
       const reducedDamage = Math.max(0, damage - this.defense);
-      this.defense = Math.max(0, this.defense - Math.floor(this.defense * 0.2));
-      this.health -= reducedDamage;
+      this.defense = this.defense - 2;
+      this.health -= reducedDamage * this.vulnerabilityIndex + 0.3;
       await typeText(
         chalk.bgMagenta(
-          `${this.name} has received ${reducedDamage.toFixed(
-            2,
-          )} damage after defense!\n`,
+          `${this.name} has received ${(reducedDamage * this.vulnerabilityIndex + 0.3).toFixed(2)} damage after defense!\n`,
         ),
       );
       await typeText(

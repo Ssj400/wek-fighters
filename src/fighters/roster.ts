@@ -11,7 +11,7 @@ import {
   strongCross,
 } from "../common/attacks";
 
-export const jefte = new Defender("inca", 100, 35, 10, 0, false, 10);
+export const jefte = new Defender("inca", 100, 20, 10, 0, false, 10);
 jefte.setAttack({
   Jab: jab,
   "Llama Left Hook": llamaLeftHook,
