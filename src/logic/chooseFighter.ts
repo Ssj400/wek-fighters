@@ -28,6 +28,7 @@ export async function chooseFighter(fighters: Fighter[]): Promise<Fighter[]> {
   fightersChosen.push(fighters[fighterIndex]);
 
   await typeText(`\nYou have chosen: ${fighters[fighterIndex].name}\n\n`);
+  fighters.splice(fighterIndex, 1);
 
   await typeText("Choose your opponent:\n");
 

@@ -2,8 +2,15 @@ import { Fighter } from "../classes/Fighter";
 import { typeText } from "../utils/typeText";
 import { sleep } from "../utils/sleep";
 import { calculateCrit } from "../utils/crit";
+import { OutBoxer } from "../classes/OutBoxer";
+import chalk from "chalk";
 
-type FighterClass = "Puncher" | "CounterPuncher" | "Fighter" | string;
+type FighterClass =
+  | "Puncher"
+  | "CounterPuncher"
+  | "Fighter"
+  | "OutBoxer"
+  | string;
 export interface Attack {
   name: string;
   staminaCost?: number;
@@ -37,6 +44,9 @@ async function baseDamage(
   attacker: Fighter,
   basePower: number,
 ): Promise<number> {
+  if (attacker instanceof OutBoxer && (await attacker.checkDistanceControl())) {
+    basePower *= 2;
+  }
   return await calculateCrit(
     basePower * (attacker.getStrength() / 100 + 1),
     attack.criticChance,
@@ -54,6 +64,9 @@ export const jab: Attack = {
   execute: async (attacker, target) => {
     await typeText(`${attacker.name} jabs!\n`);
     attacker.breakGuard(target);
+    if (attacker instanceof OutBoxer) {
+      attacker.jabCount++;
+    }
     let damage = await baseDamage(jab, attacker, 10);
     damage = await applyClassModifiers(damage, attacker, target, jab);
 

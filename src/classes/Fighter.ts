@@ -183,10 +183,10 @@ export class Fighter {
   }
 
   async dodgeAttack(chancePotenciator: number = 0): Promise<boolean> {
-    const fatiguePenalty = this.stamina < 30 ? -0.1 : 0;
+    const fatiguePenalty = this.stamina < 30 ? -0.3 : 0;
     const chance = Math.min(
       0.6,
-      chancePotenciator + this.speed / 100 + fatiguePenalty,
+      chancePotenciator + this.speed / 200 + fatiguePenalty,
     );
     if (Math.random() < chance) {
       await typeText(chalk.bgWhite(`${this.name} dodged the attack!!!\n`));

@@ -2,6 +2,7 @@ import { Fighter } from "../classes/Fighter";
 import { Puncher } from "../classes/Puncher";
 import { CounterPuncher } from "../classes/CounterPuncher";
 import { Defender } from "../classes/Defender";
+import { OutBoxer } from "../classes/OutBoxer";
 import {
   divineUppercut,
   jab,
@@ -44,4 +45,10 @@ juan.setAttack({
   "Strong Cross": strongCross,
 });
 
-export const fighters: Fighter[] = [jefte, mati, alan, juan];
+export const gaspar = new OutBoxer("Bunny", 100, 5, 55, 0, false);
+gaspar.setAttack({
+  Jab: jab,
+  "Strong Cross": strongCross,
+});
+
+export const fighters: Fighter[] = [jefte, mati, alan, juan, gaspar];
