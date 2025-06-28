@@ -1,0 +1,1 @@
+:root{color:#fff;background-color:#121212}body{display:grid;grid-template-rows:auto 1fr auto;height:100vh;margin:0;font-family:Arial,sans-serif;color:var(--color);background-color:var(--background-color);overflow:hidden}canvas{display:block;margin:auto}
