@@ -21,6 +21,7 @@ export class CharacterSelectScene extends Phaser.Scene {
     this.load.image("Juan-selection", "assets/juan-selection.png");
     this.load.image("Alan-selection", "assets/alan-selection.png");
     this.load.image("Jefte-selection", "assets/jefte-selection.png");
+    this.load.image("question-mark", "assets/question-mark.png");
 
     this.load.audio("click", "assets/sfx/click.wav");
     this.load.audio("Start fight", "assets/sfx/start-fight.mp3");
@@ -40,14 +41,14 @@ export class CharacterSelectScene extends Phaser.Scene {
     const startFightSound = this.sound.add("Start fight");
 
     this.add
-      .text(500, 550, "Description", {
+      .text(500, 290, "Description", {
         fontSize: "24px",
         color: "#ffffff",
       })
       .setOrigin(0.5);
 
     this.descriptionText = this.add
-      .text(500, 280, "", {
+      .text(500, 180, "", {
         fontSize: "16px",
         color: "#ffffff",
         backgroundColor: "#000000",
@@ -61,7 +62,7 @@ export class CharacterSelectScene extends Phaser.Scene {
         key: "Mati",
         name: "Mati",
         x: 200,
-        y: 200,
+        y: 220,
         description:
           "Very strong fighter, a puncher in all\nsenses. His slowness is compensated\nby his high damage output.\n",
       },
@@ -69,22 +70,36 @@ export class CharacterSelectScene extends Phaser.Scene {
         key: "Juan",
         name: "Juan",
         x: 800,
-        y: 200,
+        y: 220,
         description: "Strong and resilient.\n",
       },
       {
         key: "Alan",
         name: "Alan",
-        x: 200,
-        y: 400,
+        x: 400,
+        y: 420,
         description: "Balanced fighter with good stamina.\n",
       },
       {
         key: "Jefte",
         name: "Jefte",
-        x: 800,
-        y: 400,
+        x: 600,
+        y: 420,
         description: "A fighter with unpredictable moves.\n",
+      },
+      {
+        key: "Coming soon",
+        name: "Coming soon!",
+        x: 800,
+        y: 420,
+        description: "",
+      },
+      {
+        key: "Coming soon",
+        name: "Coming soon!",
+        x: 200,
+        y: 420,
+        description: "",
       },
     ];
 
@@ -92,12 +107,18 @@ export class CharacterSelectScene extends Phaser.Scene {
       const box = this.add
         .rectangle(fighter.x, fighter.y, 180, 180, 0x222222)
         .setStrokeStyle(2, 0xffffff);
-      const img = this.add.image(
-        fighter.x,
-        fighter.y,
-        `${fighter.key}-selection`,
-      );
-      img.setDisplaySize(180, 180);
+      let img: Phaser.GameObjects.Image;
+      if (fighter.key === "Coming soon") {
+        img = this.add.image(fighter.x, fighter.y, "question-mark");
+        img.setDisplaySize(180, 180);
+        img.setOrigin(0.5, 0.5);
+        img.setTint(0x888888);
+        img.setDisplaySize(240, 180);
+      } else {
+        img = this.add.image(fighter.x, fighter.y, `${fighter.key}-selection`);
+        img.setDisplaySize(180, 180);
+      }
+
       this.add
         .text(fighter.x, fighter.y + 60, fighter.name, {
           fontSize: "18px",
@@ -112,6 +133,7 @@ export class CharacterSelectScene extends Phaser.Scene {
 
       hitbox.on("pointerdown", () => {
         const fighterObj = this.allFighters[fighter.name];
+        if (!fighterObj) return;
         clickSound.play();
 
         if (this.currentPhase === "choose-player") {
@@ -151,6 +173,7 @@ export class CharacterSelectScene extends Phaser.Scene {
       hitbox.on("pointerover", () => {
         box.setFillStyle(0x444444);
         const fighterObj = this.allFighters[fighter.name];
+        if (!fighterObj) return;
         const combinedText = `${fighter.description}\n${fighterObj.getMenuStats()}`;
         this.descriptionText!.setText(combinedText);
         this.descriptionText!.setVisible(true);
