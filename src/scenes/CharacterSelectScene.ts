@@ -179,9 +179,10 @@ export class CharacterSelectScene extends Phaser.Scene {
         }
         if (this.currentPhase === "ready") {
           setTimeout(() => {
-            return;
+            this.currentPhase = "choose-player";
           }, 1000);
         }
+        return;
       });
 
       hitbox.on("pointerover", () => {
