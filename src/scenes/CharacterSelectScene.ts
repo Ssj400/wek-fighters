@@ -17,13 +17,13 @@ export class CharacterSelectScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("Mati-selection", "../public/assets/mati-selection.png");
-    this.load.image("Juan-selection", "../public/assets/juan-selection.png");
-    this.load.image("Alan-selection", "../public/assets/alan-selection.png");
-    this.load.image("Jefte-selection", "../public/assets/jefte-selection.png");
+    this.load.image("Mati-selection", "assets/mati-selection.png");
+    this.load.image("Juan-selection", "assets/juan-selection.png");
+    this.load.image("Alan-selection", "assets/alan-selection.png");
+    this.load.image("Jefte-selection", "assets/jefte-selection.png");
 
-    this.load.audio("click", "../assets/sfx/click.wav");
-    this.load.audio("Start fight", "../assets/sfx/start-fight.mp3");
+    this.load.audio("click", "assets/sfx/click.wav");
+    this.load.audio("Start fight", "assets/sfx/start-fight.mp3");
   }
 
   create() {

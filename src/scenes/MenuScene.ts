@@ -6,11 +6,11 @@ export class MenuScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("background", "../assets/title-background.jpg");
-    this.load.image("logo", "../assets/title.png");
-    this.load.image("fire", "../assets/fire.png");
+    this.load.image("background", "assets/title-background.jpg");
+    this.load.image("logo", "assets/title.png");
+    this.load.image("fire", "assets/fire.png");
 
-    this.load.audio("click", "../assets/sfx/click.wav");
+    this.load.audio("click", "assets/sfx/click.wav");
   }
 
   create() {

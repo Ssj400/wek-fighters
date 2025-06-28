@@ -480,14 +480,14 @@ export class FightScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("background-ring", "../public/assets/ringBackground.jpg");
+    this.load.image("background-ring", "assets/ringBackground.jpg");
 
-    this.load.image("mati", "../public/assets/mati.png");
-    this.load.image("juan", "../public/assets/juan.png");
-    this.load.image("alan", "../public/assets/alan.png");
-    this.load.image("jefte", "../public/assets/jefte.png");
+    this.load.image("mati", "assets/mati.png");
+    this.load.image("juan", "assets/juan.png");
+    this.load.image("alan", "assets/alan.png");
+    this.load.image("jefte", "assets/jefte.png");
 
-    this.load.image("blood", "../public/assets/blood.png");
+    this.load.image("blood", "assets/blood.png");
   }
 
   create() {
