@@ -47,7 +47,7 @@ export class Fighter {
   }
 
   getMenuStats(): string {
-    return `Health: ${this.health}\nStrength: ${this.strength}\nSpeed: ${this.speed}\nStamina: ${this.stamina}`;
+    return `Strength: ${this.strength}\nSpeed: ${this.speed}`;
   }
 
   getHud(): string {

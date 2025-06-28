@@ -140,6 +140,7 @@ export class FightScene extends Phaser.Scene {
         })
         .setInteractive()
         .on("pointerdown", async () => {
+          playSound(this, "action-sound", { volume: 0.4 });
           options.forEach((option) => option.destroy());
           await this.chooseAttack(player, opponent);
         })
@@ -153,6 +154,7 @@ export class FightScene extends Phaser.Scene {
         })
         .setInteractive()
         .on("pointerdown", async () => {
+          playSound(this, "action-sound", { volume: 0.4 });
           options.forEach((option) => option.destroy());
           if (this.isShowingMessage) return;
           await player.block();
@@ -170,6 +172,7 @@ export class FightScene extends Phaser.Scene {
         })
         .setInteractive()
         .on("pointerdown", async () => {
+          playSound(this, "action-sound", { volume: 0.4 });
           options.forEach((option) => option.destroy());
           if (this.isShowingMessage) return;
           await player.recoverHealth();
@@ -187,6 +190,7 @@ export class FightScene extends Phaser.Scene {
         })
         .setInteractive()
         .on("pointerdown", async () => {
+          playSound(this, "action-sound", { volume: 0.4 });
           options.forEach((option) => option.destroy());
           if (this.isShowingMessage) return;
           await player.log(player.getStats());
@@ -221,7 +225,9 @@ export class FightScene extends Phaser.Scene {
           })
           .setInteractive()
           .on("pointerdown", async () => {
+            playSound(this, "action-sound", { volume: 0.4 });
             attackTexts.forEach((text) => text.destroy());
+            returnText.destroy();
             if (this.isShowingMessage) return;
             descriptionText?.destroy();
             await this.animateAttackPlayer(this.playerSprite);
@@ -232,12 +238,17 @@ export class FightScene extends Phaser.Scene {
           .on("pointerover", () => {
             attackText.setStyle({ color: "#ff4d4d" });
             descriptionText = this.add
-              .text(30, 320, attack.description, {
-                fontSize: "16px",
-                color: "#fff",
-                backgroundColor: "#000",
-                padding: { x: 10, y: 5 },
-              })
+              .text(
+                30,
+                320,
+                `${attack.description}\nStamina Cost: ${attack.staminaCost}`,
+                {
+                  fontSize: "16px",
+                  color: "#fff",
+                  backgroundColor: "#000",
+                  padding: { x: 10, y: 5 },
+                },
+              )
               .setDepth(12);
           })
           .on("pointerout", () => {
@@ -249,6 +260,28 @@ export class FightScene extends Phaser.Scene {
         return attackText;
       },
     );
+
+    const returnText = this.add
+      .text(850, 560, "Go back", {
+        fontSize: "16px",
+        color: "#fff",
+        backgroundColor: "#000",
+        padding: { x: 10, y: 5 },
+      })
+      .setInteractive()
+      .setDepth(12)
+      .on("pointerdown", async () => {
+        attackTexts.forEach((text) => text.destroy());
+        returnText.destroy();
+        descriptionText?.destroy();
+        await this.displayPlayerAction(player, opponent);
+      })
+      .on("pointerover", () => {
+        returnText.setStyle({ color: "#ff4d4d" });
+      })
+      .on("pointerout", () => {
+        returnText.setStyle({ color: "#fff" });
+      });
   }
 
   private updateStats() {
@@ -514,6 +547,7 @@ export class FightScene extends Phaser.Scene {
     this.load.audio("recover-stamina", "assets/sfx/recover-stamina.mp3");
     this.load.audio("block", "assets/sfx/block.mp3");
     this.load.audio("dodge", "assets/sfx/dodge.mp3");
+    this.load.audio("action-sound", "assets/sfx/action-sound.mp3");
   }
 
   create() {

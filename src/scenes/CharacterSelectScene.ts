@@ -75,28 +75,31 @@ export class CharacterSelectScene extends Phaser.Scene {
         x: 200,
         y: 220,
         description:
-          "Very strong fighter, a puncher in all\nsenses. His slowness is compensated\nby his high damage output.\n",
+          "A beast in the ring, no one\ncan match his destructive power.\nOutside of the ring, he is\na millionare businessman. A genius\nin all his senses.\nSPECIALTY: PUNCHER\n",
       },
       {
         key: "Juan",
         name: "Juan",
         x: 800,
         y: 220,
-        description: "Strong and resilient.\n",
+        description:
+          "Don't underestimate him thinking\nhe's just a skinny guy.\nHe's part of an ancient reptilian race\nthat has been training for centuries.\nTruthfully a master of counter-attacks.\nSPECIALTY: COUNTER-PUNCHER\n",
       },
       {
         key: "Alan",
         name: "Alan",
         x: 400,
         y: 420,
-        description: "Balanced fighter with good stamina.\n",
+        description:
+          "He attended to all shrek's classes\non thursday's and was able to learn\nall the techniques of the legendary\nogre. Now he is a master of the\nswamps. He is also a great dancer.\nSPECIALTY: PUNCHER\n",
       },
       {
         key: "Jefte",
         name: "Jefte",
         x: 600,
         y: 420,
-        description: "A fighter with unpredictable moves.\n",
+        description:
+          "Coming directly from the great\nINCA EMPIRE, throughout all his\ntravels on the peruvian deserts among\nthe llamas, he learned secret techniques\nthat could destroy any kind of\nspecies.\nSPECIALTY: DEFENDER\n",
       },
       {
         key: "Coming soon",
