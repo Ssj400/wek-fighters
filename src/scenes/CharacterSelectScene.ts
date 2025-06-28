@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { Fighter } from "../classes/Fighter";
 import { createAllFighters } from "../common/fighters";
 import { addMuteButton } from "../common/uiHelpers";
+import { playSound } from "../common/sound";
 
 export class CharacterSelectScene extends Phaser.Scene {
   private descriptionText?: Phaser.GameObjects.Text;
@@ -28,10 +29,18 @@ export class CharacterSelectScene extends Phaser.Scene {
 
     this.load.audio("click", "assets/sfx/click.wav");
     this.load.audio("Start fight", "assets/sfx/start-fight.mp3");
+    this.load.audio(
+      "space",
+      `assets/sfx/space-${Math.floor(Math.random() * 2) + 1}.mp3`,
+    );
   }
 
   create() {
     this.cameras.main.fadeIn(1000, 0, 0, 0);
+    if (!this.sound.get("space")?.isPlaying) {
+      playSound(this, "space", { loop: true, volume: 0.5 });
+    }
+
     this.add.rectangle(500, 300, 1000, 600, 0x111111);
     this.infoText = this.add
       .text(500, 50, "Choose Your Fighter", {
@@ -41,8 +50,6 @@ export class CharacterSelectScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     addMuteButton(this, 950, 50);
-    const clickSound = this.sound.add("click");
-    const startFightSound = this.sound.add("Start fight");
 
     this.add
       .text(500, 290, "Description", {
@@ -138,7 +145,7 @@ export class CharacterSelectScene extends Phaser.Scene {
       hitbox.on("pointerdown", () => {
         const fighterObj = this.allFighters[fighter.name];
         if (!fighterObj) return;
-        clickSound.play();
+        playSound(this, "click", { volume: 0.3 });
 
         if (this.currentPhase === "choose-player") {
           box.setStrokeStyle(4, 0xffff00);
@@ -154,7 +161,8 @@ export class CharacterSelectScene extends Phaser.Scene {
             return;
           }
 
-          startFightSound.play();
+          this.sound.stopAll();
+          playSound(this, "Start fight", { volume: 0.5 });
           this.currentPhase = "ready";
           this.selectedOpponent = fighterObj;
           this.cameras.main.fadeOut(1000, 0, 0, 0);
@@ -168,9 +176,8 @@ export class CharacterSelectScene extends Phaser.Scene {
         }
         if (this.currentPhase === "ready") {
           setTimeout(() => {
-            this.currentPhase = "choose-player";
+            return;
           }, 1000);
-          return;
         }
       });
 

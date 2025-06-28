@@ -76,7 +76,7 @@ const baseFighters: Record<string, Fighter> = (() => {
     0.1,
     false,
     10,
-    true,
+    false,
     0.7,
     dummyLogger,
   );

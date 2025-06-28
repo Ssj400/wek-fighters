@@ -58,6 +58,7 @@ export async function fight(
   scene.cameras.main.fadeOut(1500, 0, 0, 0);
 
   scene.time.delayedCall(1600, () => {
+    scene.sound.stopAll();
     scene.scene.start("CharacterSelectScene");
   });
 }

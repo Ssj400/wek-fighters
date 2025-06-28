@@ -4,6 +4,7 @@ import { fight } from "../logic/fight";
 import { playerTurn } from "../logic/playerTurn";
 import { CounterPuncher } from "../classes/CounterPuncher";
 import { addMuteButton } from "../common/uiHelpers";
+import { playSound } from "../common/sound";
 
 export class FightScene extends Phaser.Scene {
   private fightMessages: string[] = [];
@@ -370,6 +371,10 @@ export class FightScene extends Phaser.Scene {
     await new Promise((resolve) => {
       sprite.setTint(0xff0000);
 
+      playSound(this, "punch", {
+        volume: 0.4,
+      });
+
       this.add
         .particles(sprite.x, sprite.y - 200, "blood", {
           speed: { min: -300, max: 300 },
@@ -436,6 +441,9 @@ export class FightScene extends Phaser.Scene {
   ): Promise<void> {
     await new Promise((resolve) => {
       sprite.setTint(0x00ff00);
+      playSound(this, "heal", {
+        volume: 0.4,
+      });
       setTimeout(() => {
         sprite.clearTint();
         resolve(void 0);
@@ -448,6 +456,9 @@ export class FightScene extends Phaser.Scene {
   ): Promise<void> {
     await new Promise((resolve) => {
       sprite.setTint(0x34a4f3);
+      playSound(this, "recover-stamina", {
+        volume: 0.4,
+      });
       setTimeout(() => {
         sprite.clearTint();
         resolve(void 0);
@@ -491,10 +502,36 @@ export class FightScene extends Phaser.Scene {
     this.load.image("mute-icon", "assets/mute-icon.png");
 
     this.load.image("blood", "assets/blood.png");
+
+    this.load.audio("punch", "assets/sfx/punch.mp3");
+    this.load.audio("ready", "assets/sfx/ready.mp3");
+    this.load.audio(
+      "fight-song",
+      `assets/sfx/fight-song-${Math.floor(Math.random() * 2) + 1}.mp3`,
+    );
+    this.load.audio("crowd", "assets/sfx/crowd.mp3");
+    this.load.audio("heal", "assets/sfx/heal.mp3");
+    this.load.audio("recover-stamina", "assets/sfx/recover-stamina.mp3");
+    this.load.audio("block", "assets/sfx/block.mp3");
+    this.load.audio("dodge", "assets/sfx/dodge.mp3");
   }
 
   create() {
     addMuteButton(this, 440, 20);
+
+    playSound(this, "ready", {
+      volume: 1,
+    });
+
+    playSound(this, "fight-song", {
+      loop: true,
+      volume: 0.4,
+    });
+
+    playSound(this, "crowd", {
+      loop: true,
+      volume: 0.3,
+    });
 
     //Set up the logger and background
     const logger = (msg: string) => this.logToFightText(msg);
@@ -543,14 +580,20 @@ export class FightScene extends Phaser.Scene {
     }
 
     this.player.setOnDodgeCallback(() => this.animateDodge(this.playerSprite));
-    this.opponent.setOnDodgeCallback(() =>
-      this.animateDodge(this.opponentSprite),
-    );
+    this.opponent.setOnDodgeCallback(() => {
+      playSound(this, "dodge", {
+        volume: 0.4,
+      });
+      this.animateDodge(this.opponentSprite);
+    });
 
     this.player.setOnBlockCallback(() => this.animateBlock(this.playerSprite));
-    this.opponent.setOnBlockCallback(() =>
-      this.animateBlock(this.opponentSprite),
-    );
+    this.opponent.setOnBlockCallback(() => {
+      this.animateBlock(this.opponentSprite);
+      playSound(this, "block", {
+        volume: 0.4,
+      });
+    });
 
     //Set up fight text and HUD
 
