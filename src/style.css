@@ -1,13 +1,25 @@
 :root {
   color: #ffffff;
-  background-color: #121212;
+  background-color: #000;
+}
+
+html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #000;
+  width: 100vw;
+  height: 100vh;
 }
 
 body {
   display: grid;
   grid-template-rows: auto 1fr auto;
+  width: 100vw;
   height: 100vh;
   margin: 0;
+  padding: 0;
+  overflow: hidden;
   font-family: Arial, sans-serif;
   color: var(--color);
   background-color: var(--background-color);
@@ -16,6 +28,29 @@ body {
 
 canvas {
   display: block;
-  margin: auto;
+  margin: 0 auto;
 }
 
+@media screen and (orientation: portrait) {
+  body::before {
+    content: "Por favor, gira tu dispositivo para jugar en horizontal";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    color: #fff;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    text-align: center;
+    padding: 20px;
+  }
+
+  canvas {
+    display: none !important;
+  }
+}

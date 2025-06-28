@@ -20,6 +20,10 @@ const config: Phaser.Types.Core.GameConfig = {
     },
   },
   scene: [MenuScene, CharacterSelectScene, FightScene],
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
 };
 
 new Phaser.Game(config);
