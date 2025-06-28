@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { addMuteButton } from "../common/uiHelpers";
 
 export class MenuScene extends Phaser.Scene {
   constructor() {
@@ -9,6 +10,8 @@ export class MenuScene extends Phaser.Scene {
     this.load.image("background", "assets/title-background.jpg");
     this.load.image("logo", "assets/title.png");
     this.load.image("fire", "assets/fire.png");
+    this.load.image("sound-icon", "assets/sound-icon.png");
+    this.load.image("mute-icon", "assets/mute-icon.png");
 
     this.load.audio("click", "assets/sfx/click.wav");
   }
@@ -18,6 +21,8 @@ export class MenuScene extends Phaser.Scene {
     this.add.image(500, 250, "logo").setOrigin(0.5).setScale(0.4).setDepth(2);
 
     const clickSound = this.sound.add("click");
+
+    addMuteButton(this, 950, 50);
 
     this.add.particles(500, 300, "fire", {
       speed: { min: 50, max: 150 },

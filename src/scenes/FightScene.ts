@@ -3,6 +3,7 @@ import { Fighter } from "../classes/Fighter";
 import { fight } from "../logic/fight";
 import { playerTurn } from "../logic/playerTurn";
 import { CounterPuncher } from "../classes/CounterPuncher";
+import { addMuteButton } from "../common/uiHelpers";
 
 export class FightScene extends Phaser.Scene {
   private fightMessages: string[] = [];
@@ -486,11 +487,15 @@ export class FightScene extends Phaser.Scene {
     this.load.image("juan", "assets/juan.png");
     this.load.image("alan", "assets/alan.png");
     this.load.image("jefte", "assets/jefte.png");
+    this.load.image("sound-icon", "assets/sound-icon.png");
+    this.load.image("mute-icon", "assets/mute-icon.png");
 
     this.load.image("blood", "assets/blood.png");
   }
 
   create() {
+    addMuteButton(this, 440, 20);
+
     //Set up the logger and background
     const logger = (msg: string) => this.logToFightText(msg);
     this.player.setLogger(logger);
@@ -579,7 +584,8 @@ export class FightScene extends Phaser.Scene {
         backgroundColor: "#000",
         padding: { x: 6, y: 2 },
       })
-      .setDepth(3);
+      .setDepth(3)
+      .setOrigin(0, 0.5);
 
     this.opponentHudText = this.add
       .text(990, 70, "", {

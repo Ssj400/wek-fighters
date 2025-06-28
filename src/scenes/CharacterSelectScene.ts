@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { Fighter } from "../classes/Fighter";
 import { createAllFighters } from "../common/fighters";
+import { addMuteButton } from "../common/uiHelpers";
 
 export class CharacterSelectScene extends Phaser.Scene {
   private descriptionText?: Phaser.GameObjects.Text;
@@ -22,6 +23,8 @@ export class CharacterSelectScene extends Phaser.Scene {
     this.load.image("Alan-selection", "assets/alan-selection.png");
     this.load.image("Jefte-selection", "assets/jefte-selection.png");
     this.load.image("question-mark", "assets/question-mark.png");
+    this.load.image("sound-icon", "assets/sound-icon.png");
+    this.load.image("mute-icon", "assets/mute-icon.png");
 
     this.load.audio("click", "assets/sfx/click.wav");
     this.load.audio("Start fight", "assets/sfx/start-fight.mp3");
@@ -37,6 +40,7 @@ export class CharacterSelectScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
+    addMuteButton(this, 950, 50);
     const clickSound = this.sound.add("click");
     const startFightSound = this.sound.add("Start fight");
 
