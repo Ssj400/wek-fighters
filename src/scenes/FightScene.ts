@@ -5,6 +5,7 @@ import { playerTurn } from "../logic/playerTurn";
 import { CounterPuncher } from "../classes/CounterPuncher";
 import { addMuteButton } from "../common/uiHelpers";
 import { playSound } from "../common/sound";
+import type { FightSceneData } from "../types/types";
 
 export class FightScene extends Phaser.Scene {
   private fightMessages: string[] = [];
@@ -26,6 +27,7 @@ export class FightScene extends Phaser.Scene {
   private opponentStaminaDisplayed: number = 100;
   private playerHudText!: Phaser.GameObjects.Text;
   private opponentHudText!: Phaser.GameObjects.Text;
+  private initialData!: FightSceneData;
   public playerSprite!: Phaser.GameObjects.Image;
   public opponentSprite!: Phaser.GameObjects.Image;
 
@@ -33,9 +35,14 @@ export class FightScene extends Phaser.Scene {
     super("FightScene");
   }
 
-  init(data: { player: Fighter; opponent: Fighter }) {
+  init(data: FightSceneData) {
+    this.initialData = data;
     this.player = data.player.clone();
     this.opponent = data.opponent.clone();
+  }
+
+  getInitialData(): FightSceneData {
+    return this.initialData;
   }
 
   addFightMessages(messages: string[]) {
@@ -52,7 +59,7 @@ export class FightScene extends Phaser.Scene {
     }
   }
 
-  logToFightText(message: string): Promise<void> {
+  async logToFightText(message: string): Promise<void> {
     return new Promise((resolve) => {
       this.messageQueue.push({ message, resolve });
       if (!this.isShowingMessage) this.showNextMessage();
@@ -551,7 +558,15 @@ export class FightScene extends Phaser.Scene {
   }
 
   create() {
-    addMuteButton(this, 440, 20);
+    this.fightMessages = [];
+    this.currentMessageIndex = 0;
+    this.messageQueue = [];
+    this.isShowingMessage = false;
+    this.pendingActionResolve = undefined;
+    if (this.fightText) {
+      this.fightText.setText("");
+    }
+    addMuteButton(this, 440, 30);
 
     playSound(this, "ready", {
       volume: 1,
@@ -565,6 +580,50 @@ export class FightScene extends Phaser.Scene {
     playSound(this, "crowd", {
       loop: true,
       volume: 0.3,
+    });
+
+    this.add
+      .rectangle(420, 5, 160, 50, 0x000000)
+      .setOrigin(0, 0)
+      .setDepth(5)
+      .setStrokeStyle(2, 0xffffff);
+
+    const menuText = this.add
+      .text(457, 11, "Main menu", {
+        fontSize: "20px",
+        color: "#fff",
+      })
+      .setInteractive()
+      .setDepth(6)
+      .on("pointerdown", () => {
+        this.scene.stop("FightScene");
+        this.scene.start("CharacterSelectScene");
+      });
+
+    menuText.on("pointerover", () => {
+      menuText.setStyle({ color: "#ffd700" });
+    });
+    menuText.on("pointerout", () => {
+      menuText.setStyle({ color: "#fff" });
+    });
+
+    const restartText = this.add
+      .text(457, 31, "Restart", {
+        fontSize: "20px",
+        color: "#fff",
+      })
+      .setInteractive()
+      .setDepth(6)
+      .on("pointerdown", () => {
+        const fightSceneData = this.getInitialData();
+        this.scene.restart(fightSceneData);
+      });
+
+    restartText.on("pointerover", () => {
+      restartText.setStyle({ color: "#ffd700" });
+    });
+    restartText.on("pointerout", () => {
+      restartText.setStyle({ color: "#fff" });
     });
 
     //Set up the logger and background
