@@ -39,6 +39,12 @@ export class FightScene extends Phaser.Scene {
     this.initialData = data;
     this.player = data.player.clone();
     this.opponent = data.opponent.clone();
+
+    this.fightMessages = [];
+    this.currentMessageIndex = 0;
+    this.messageQueue = [];
+    this.isShowingMessage = false;
+    this.pendingActionResolve = undefined;
   }
 
   getInitialData(): FightSceneData {
@@ -558,14 +564,6 @@ export class FightScene extends Phaser.Scene {
   }
 
   create() {
-    this.fightMessages = [];
-    this.currentMessageIndex = 0;
-    this.messageQueue = [];
-    this.isShowingMessage = false;
-    this.pendingActionResolve = undefined;
-    if (this.fightText) {
-      this.fightText.setText("");
-    }
     addMuteButton(this, 440, 30);
 
     playSound(this, "ready", {
@@ -596,6 +594,8 @@ export class FightScene extends Phaser.Scene {
       .setInteractive()
       .setDepth(6)
       .on("pointerdown", () => {
+        this.sound.stopAll();
+        this.tweens.killAll();
         this.scene.stop("FightScene");
         this.scene.start("CharacterSelectScene");
       });
@@ -616,6 +616,8 @@ export class FightScene extends Phaser.Scene {
       .setDepth(6)
       .on("pointerdown", () => {
         const fightSceneData = this.getInitialData();
+        this.sound.stopAll();
+        this.tweens.killAll();
         this.scene.restart(fightSceneData);
       });
 
