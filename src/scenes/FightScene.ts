@@ -596,6 +596,9 @@ export class FightScene extends Phaser.Scene {
   }
 
   create() {
+    const getResponsiveFontSize = (base: number) => {
+      return `${Math.round((base * this.scale.width) / 1000)}px`;
+    };
     addMuteButton(this, 440, 30);
 
     playSound(this, "ready", {
@@ -620,7 +623,7 @@ export class FightScene extends Phaser.Scene {
 
     const menuText = this.add
       .text(457, 11, "Main menu", {
-        fontSize: "20px",
+        fontSize: getResponsiveFontSize(20),
         color: "#fff",
       })
       .setInteractive()
@@ -641,7 +644,7 @@ export class FightScene extends Phaser.Scene {
 
     const restartText = this.add
       .text(457, 31, "Restart", {
-        fontSize: "20px",
+        fontSize: getResponsiveFontSize(20),
         color: "#fff",
       })
       .setInteractive()
@@ -732,7 +735,7 @@ export class FightScene extends Phaser.Scene {
 
     this.continueArrow = this.add
       .text(950, 565, "▼", {
-        fontSize: "20px",
+        fontSize: getResponsiveFontSize(24),
         color: "#fff",
       })
       .setDepth(11)
@@ -740,7 +743,7 @@ export class FightScene extends Phaser.Scene {
 
     this.fightText = this.add
       .text(50, 525, "", {
-        fontSize: "18px",
+        fontSize: getResponsiveFontSize(18),
         color: "#fff",
         wordWrap: { width: 700 },
         lineSpacing: 4,
@@ -749,7 +752,7 @@ export class FightScene extends Phaser.Scene {
 
     this.playerHudText = this.add
       .text(10, 70, "", {
-        fontSize: "16px",
+        fontSize: getResponsiveFontSize(16),
         color: "#ffffff",
         backgroundColor: "#000",
         padding: { x: 6, y: 2 },
@@ -759,7 +762,7 @@ export class FightScene extends Phaser.Scene {
 
     this.opponentHudText = this.add
       .text(990, 70, "", {
-        fontSize: "16px",
+        fontSize: getResponsiveFontSize(16),
         color: "#ffffff",
         backgroundColor: "#000",
         padding: { x: 6, y: 2 },
