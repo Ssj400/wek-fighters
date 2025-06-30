@@ -7,22 +7,51 @@ export async function cpuTurn(
   scene: FightScene,
 ): Promise<void> {
   await cpu.log(`${cpu.name}'s turn!`);
-  const attackNames = Object.values(cpu.getAttackNames());
-  const lifeRatio = cpu.getHealth() / 100;
-  const shouldBlock = Math.random() < 0.4 || lifeRatio < 0.5;
-  const shouldRecover = Math.random() < 0.2 || lifeRatio < 0.2;
 
-  if (shouldBlock && cpu.getBlockFail() < 0.7) {
+  const attacks = cpu.getAttackNames();
+  const playerHealth = player.getHealth();
+  const cpuHealth = cpu.getHealth();
+  const cpuStamina = cpu.getStamina();
+  const playerStamina = player.getStamina();
+
+  if (cpuHealth < 30 && playerStamina < 20 && Math.random() < 0.8) {
     await cpu.block();
     await scene.animateBlock(scene.opponentSprite);
-  } else if (shouldRecover) {
+    return;
+  }
+
+  if (cpuHealth < 40 && cpuStamina > 10 && Math.random() < 0.6) {
     await cpu.recoverHealth();
     await scene.animateRecoverHealth(scene.opponentSprite);
-  } else {
+    scene.updateStats();
+    return;
+  }
+
+  const bestAttack = attacks.reduce((best, current) =>
+    current.basePower > best.basePower ? current : best,
+  );
+
+  if (playerHealth < 20 && cpuStamina >= bestAttack.staminaCost) {
     await scene.animateAttackOponent(scene.opponentSprite);
-    await cpu.useAttack(
-      attackNames[Math.floor(Math.random() * attackNames.length)].name,
-      player,
-    );
+    await cpu.useAttack(bestAttack.name, player);
+    return;
+  }
+
+  if (cpuStamina < 10 && Math.random() < 0.5) {
+    await cpu.recoverHealth();
+    await scene.animateRecoverHealth(scene.opponentSprite);
+    scene.updateStats();
+    return;
+  }
+
+  const validAttacks = attacks.filter((a) => a.staminaCost <= cpuStamina);
+  const chosen = validAttacks[Math.floor(Math.random() * validAttacks.length)];
+
+  if (chosen) {
+    await scene.animateAttackOponent(scene.opponentSprite);
+    await cpu.useAttack(chosen.name, player);
+  } else {
+    await cpu.block();
+    await scene.animateBlock(scene.opponentSprite);
   }
 }
