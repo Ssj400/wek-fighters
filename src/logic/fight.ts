@@ -53,8 +53,10 @@ export async function fight(
     if (!validateLife(fighter2)) break;
     await fighter1.recoverStamina();
     await scene.animateRecoverStamina(scene.playerSprite);
+    scene.updateStats();
     await fighter2.recoverStamina();
     await scene.animateRecoverStamina(scene.opponentSprite);
+    scene.updateStats();
     await fighter1.log("The turn has ended!");
   }
 

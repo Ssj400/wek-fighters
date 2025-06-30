@@ -12,10 +12,11 @@ export class Fighter {
   protected attacks: Record<string, Attack> = {};
   protected vulnerabilityIndex: number;
   private logger: (msg: string) => Promise<void>;
-  protected onDamageCallback?: () => void;
+  protected onDamageCallback?: () => Promise<void>;
   protected onDeathCallback?: () => void;
   protected onDodgeCallback?: () => void;
   protected onBlockCallback?: () => void;
+  protected lastDamage: number = 0;
 
   constructor(
     name: string,
@@ -114,11 +115,12 @@ export class Fighter {
     }
     await this.log(`${this.name} failed to block the attack!`);
 
-    if (this.onDamageCallback) this.onDamageCallback();
-
     if (this.stamina < 30) {
       await this.log(`${this.name} completely receives the attack! `);
       this.health -= Number(
+        (damage * this.vulnerabilityIndex * 1.2).toFixed(2),
+      );
+      this.lastDamage = Number(
         (damage * this.vulnerabilityIndex * 1.2).toFixed(2),
       );
       await this.log(
@@ -126,10 +128,13 @@ export class Fighter {
       );
     } else {
       this.health -= Number((damage * this.vulnerabilityIndex).toFixed(2));
+      this.lastDamage = Number((damage * this.vulnerabilityIndex).toFixed(2));
       await this.log(
         `${this.name} has received ${(damage * this.vulnerabilityIndex).toFixed(2)} damage!`,
       );
     }
+
+    if (this.onDamageCallback) await this.onDamageCallback();
 
     if (this.health <= 0) {
       this.health = 0;
@@ -255,7 +260,7 @@ export class Fighter {
     return this.stamina;
   }
 
-  setOnDamageCallback(cb: () => void) {
+  setOnDamageCallback(cb: () => Promise<void>) {
     this.onDamageCallback = cb;
   }
 
@@ -283,5 +288,9 @@ export class Fighter {
       this.vulnerabilityIndex,
       this.logger,
     );
+  }
+
+  getLastDamage(): number {
+    return this.lastDamage;
   }
 }

@@ -52,19 +52,30 @@ export class CounterPuncher extends Fighter {
       return;
     }
 
-    if (this.onDamageCallback) this.onDamageCallback();
-
     if (this.stamina < 30) {
       await this.log(`${this.name} completely receives the attack! \n`);
       this.health -= Number(
         (damage * 1.2 * this.vulnerabilityIndex).toFixed(2),
       );
+      this.lastDamage = Number(
+        (damage * 1.2 * this.vulnerabilityIndex).toFixed(2),
+      );
+      await this.log(
+        `${this.name} has received ${(
+          damage *
+          1.2 *
+          this.vulnerabilityIndex
+        ).toFixed(2)} damage!\n`,
+      );
     } else {
       this.health -= Number((damage * this.vulnerabilityIndex).toFixed(2));
+      this.lastDamage = Number((damage * this.vulnerabilityIndex).toFixed(2));
       await this.log(
         `${this.name} has received ${(damage * this.vulnerabilityIndex).toFixed(2)} damage!\n`,
       );
     }
+
+    if (this.onDamageCallback) await this.onDamageCallback();
 
     if (
       Math.random() < this.counterIndex &&

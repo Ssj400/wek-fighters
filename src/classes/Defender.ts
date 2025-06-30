@@ -52,11 +52,12 @@ export class Defender extends Fighter {
 
     await this.log(`${this.name} failed to block the attack!\n`);
 
-    if (this.onDamageCallback) this.onDamageCallback();
-
     if (this.stamina < 30) {
       await this.log(`${this.name} completely receives the attack! \n`);
       this.health -= Number(
+        (damage * 1.2 * this.vulnerabilityIndex + 0.3).toFixed(2),
+      );
+      this.lastDamage = Number(
         (damage * 1.2 * this.vulnerabilityIndex + 0.3).toFixed(2),
       );
       this.defense = Math.max(this.defense - 2, 0);
@@ -69,11 +70,16 @@ export class Defender extends Fighter {
       this.health -= Number(
         (reducedDamage * this.vulnerabilityIndex + 0.3).toFixed(2),
       );
+      this.lastDamage = Number(
+        (reducedDamage * this.vulnerabilityIndex + 0.3).toFixed(2),
+      );
       await this.log(
         `${this.name} has received ${(reducedDamage * this.vulnerabilityIndex + 0.3).toFixed(2)} damage after defense!\n`,
       );
       this.stamina -= 10;
     }
+
+    if (this.onDamageCallback) await this.onDamageCallback();
 
     await this.log(`${this.name}'s defense is now ${this.defense}\n`);
 

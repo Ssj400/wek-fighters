@@ -121,7 +121,6 @@ export class FightScene extends Phaser.Scene {
     }
     const { message, resolve } = next;
     await this.typeText(message);
-    this.updateStats();
     this.input.once("pointerdown", () => {
       resolve();
       this.showNextMessage();
@@ -245,7 +244,6 @@ export class FightScene extends Phaser.Scene {
             descriptionText?.destroy();
             await this.animateAttackPlayer(this.playerSprite);
             await player.useAttack(attack.name, opponent);
-            this.updateStats();
             this.notifyPlayerActionResolved();
           })
           .on("pointerover", () => {
@@ -297,7 +295,7 @@ export class FightScene extends Phaser.Scene {
       });
   }
 
-  private updateStats() {
+  public updateStats() {
     const endHealthPlayer = Math.max(this.player.getHealth(), 0);
     const endHealthOpponent = Math.max(this.opponent.getHealth(), 0);
 
@@ -413,6 +411,28 @@ export class FightScene extends Phaser.Scene {
     });
   }
 
+  private showDamageText(damage: number, x: number, y: number) {
+    const size = 2 * damage;
+    const damageText = this.add
+      .text(x, y, `${Math.floor(damage)}`, {
+        fontSize: `${size}px`,
+        color: "#ff0000",
+        padding: { x: 10, y: 5 },
+      })
+      .setDepth(20)
+      .setOrigin(0.5, 0.5);
+
+    this.tweens.add({
+      targets: damageText,
+      y: damageText.y - 50,
+      alpha: 0,
+      duration: 1000,
+      onComplete: () => {
+        damageText.destroy();
+      },
+    });
+  }
+
   private async animateDamage(sprite: Phaser.GameObjects.Image): Promise<void> {
     await new Promise((resolve) => {
       sprite.setTint(0xff0000);
@@ -420,6 +440,17 @@ export class FightScene extends Phaser.Scene {
       playSound(this, "punch", {
         volume: 0.4,
       });
+
+      const x = sprite.x;
+      const y = sprite.y - 50;
+
+      if (x < 500) {
+        const lastDamage = this.player.getLastDamage();
+        this.showDamageText(lastDamage, x, y);
+      } else {
+        const lastDamage = this.opponent.getLastDamage();
+        this.showDamageText(lastDamage, x, y);
+      }
 
       this.add
         .particles(sprite.x, sprite.y - 200, "blood", {
@@ -442,6 +473,7 @@ export class FightScene extends Phaser.Scene {
         yoyo: true,
         repeat: 2,
         onComplete: () => {
+          this.updateStats();
           sprite.clearTint();
           sprite.setAngle(0);
           sprite.setX(sprite.x);
@@ -650,11 +682,11 @@ export class FightScene extends Phaser.Scene {
 
     //Animations
 
-    this.player.setOnDamageCallback(() =>
-      this.animateDamage(this.playerSprite),
+    this.player.setOnDamageCallback(
+      async () => await this.animateDamage(this.playerSprite),
     );
-    this.opponent.setOnDamageCallback(() =>
-      this.animateDamage(this.opponentSprite),
+    this.opponent.setOnDamageCallback(
+      async () => await this.animateDamage(this.opponentSprite),
     );
 
     this.player.setOnDeathCallback(() => this.animateDeath(this.playerSprite));
