@@ -3,6 +3,7 @@ import Phaser from "phaser";
 import { FightScene } from "./scenes/FightScene";
 import { CharacterSelectScene } from "./scenes/CharacterSelectScene";
 import { MenuScene } from "./scenes/MenuScene";
+import { SelectDifficultyScene } from "./scenes/SelectDifficultyScene";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -19,7 +20,7 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false,
     },
   },
-  scene: [MenuScene, CharacterSelectScene, FightScene],
+  scene: [MenuScene, SelectDifficultyScene, CharacterSelectScene, FightScene],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,

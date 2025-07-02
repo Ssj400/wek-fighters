@@ -3,6 +3,7 @@ import { Fighter } from "../classes/Fighter";
 import { createAllFighters } from "../common/fighters";
 import { addFullScreenButton, addMuteButton } from "../common/uiHelpers";
 import { playSound } from "../common/sound";
+import type { Difficulty } from "../types/types";
 
 export class CharacterSelectScene extends Phaser.Scene {
   private descriptionText?: Phaser.GameObjects.Text;
@@ -12,10 +13,16 @@ export class CharacterSelectScene extends Phaser.Scene {
   private currentPhase: "choose-player" | "choose-opponent" | "ready" =
     "choose-player";
   private infoText?: Phaser.GameObjects.Text;
+  private difficulty!: Difficulty;
+  private returnToMenuCounter: number = 0;
 
   constructor() {
     super("CharacterSelectScene");
     this.allFighters = createAllFighters();
+  }
+
+  init(data: { difficulty: Difficulty }) {
+    this.difficulty = data.difficulty;
   }
 
   preload() {
@@ -37,9 +44,6 @@ export class CharacterSelectScene extends Phaser.Scene {
 
   create() {
     this.cameras.main.fadeIn(1000, 0, 0, 0);
-    if (!this.sound.get("space")?.isPlaying) {
-      playSound(this, "space", { loop: true, volume: 0.5 });
-    }
 
     this.add.rectangle(500, 300, 1000, 600, 0x111111);
     this.infoText = this.add
@@ -134,6 +138,36 @@ export class CharacterSelectScene extends Phaser.Scene {
         img.setDisplaySize(180, 180);
       }
 
+      const backText = this.add
+        .text(900, 550, "Go back", {
+          fontSize: "20px",
+          color: "#ffffff",
+        })
+        .setOrigin(1, 0.5)
+        .setInteractive()
+        .setDepth(10);
+
+      backText.on("pointerdown", () => {
+        this.scene.start("SelectDifficultyScene");
+        playSound(this, "click", { volume: 0.5 });
+      });
+
+      backText.on("pointerover", () => {
+        backText.setStyle({ color: "#ff0" });
+      });
+
+      backText.on("pointerout", () => {
+        backText.setStyle({ color: "#ffffff" });
+      });
+
+      this.add
+        .text(100, 550, `Difficulty: ${this.difficulty.toUpperCase()}`, {
+          fontSize: "20px",
+          color: "#ffffff",
+        })
+        .setDepth(10)
+        .setOrigin(0, 0.5);
+
       this.add
         .text(fighter.x, fighter.y + 60, fighter.name, {
           fontSize: "18px",
@@ -170,11 +204,13 @@ export class CharacterSelectScene extends Phaser.Scene {
           this.currentPhase = "ready";
           this.selectedOpponent = fighterObj;
           this.cameras.main.fadeOut(1000, 0, 0, 0);
+          this.returnToMenuCounter++;
 
           this.cameras.main.once("camerafadeoutcomplete", () => {
             this.scene.start("FightScene", {
               player: this.selectedPlayer,
               opponent: this.selectedOpponent,
+              difficulty: this.difficulty,
             });
           });
         }

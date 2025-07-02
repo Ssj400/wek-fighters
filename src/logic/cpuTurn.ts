@@ -1,7 +1,40 @@
 import { Fighter } from "../classes/Fighter.js";
 import { FightScene } from "../scenes/FightScene.js";
+import { type Difficulty } from "../types/types.js";
 
 export async function cpuTurn(
+  cpu: Fighter,
+  player: Fighter,
+  scene: FightScene,
+  difficulty: Difficulty,
+): Promise<void> {
+  if (difficulty === "normal") {
+    await normalCpu(cpu, player, scene);
+    return;
+  }
+  await easyCpu(cpu, player, scene);
+  return;
+}
+
+export async function easyCpu(
+  cpu: Fighter,
+  player: Fighter,
+  scene: FightScene,
+): Promise<void> {
+  await cpu.log(`${cpu.name}'s turn!`);
+
+  if (cpu.getHealth() > 30 && cpu.getStamina() > 10) {
+    await scene.animateAttackOponent(scene.opponentSprite);
+    await cpu.useAttack("Jab", player);
+    return;
+  }
+
+  await scene.animateBlock(scene.opponentSprite);
+  cpu.block();
+  return;
+}
+
+export async function normalCpu(
   cpu: Fighter,
   player: Fighter,
   scene: FightScene,

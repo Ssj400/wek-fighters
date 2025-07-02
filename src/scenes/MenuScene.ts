@@ -59,7 +59,7 @@ export class MenuScene extends Phaser.Scene {
     });
 
     startText.on("pointerdown", () => {
-      this.scene.start("CharacterSelectScene");
+      this.scene.start("SelectDifficultyScene");
       playSound(this, "click", { volume: 0.5 });
     });
   }

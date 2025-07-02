@@ -5,7 +5,7 @@ import { playerTurn } from "../logic/playerTurn";
 import { CounterPuncher } from "../classes/CounterPuncher";
 import { addMuteButton, addFullScreenButton } from "../common/uiHelpers";
 import { playSound } from "../common/sound";
-import type { FightSceneData } from "../types/types";
+import type { Difficulty, FightSceneData } from "../types/types";
 
 export class FightScene extends Phaser.Scene {
   private fightMessages: string[] = [];
@@ -17,6 +17,7 @@ export class FightScene extends Phaser.Scene {
   private continueArrow!: Phaser.GameObjects.Text;
   private player!: Fighter;
   private opponent!: Fighter;
+  private difficulty!: Difficulty;
   private playerHealthBar!: Phaser.GameObjects.Graphics;
   private opponentHealthBar!: Phaser.GameObjects.Graphics;
   private playerDisplayedHealth: number = 100;
@@ -39,6 +40,7 @@ export class FightScene extends Phaser.Scene {
     this.initialData = data;
     this.player = data.player.clone();
     this.opponent = data.opponent.clone();
+    this.difficulty = data.difficulty;
 
     this.fightMessages = [];
     this.currentMessageIndex = 0;
@@ -622,6 +624,15 @@ export class FightScene extends Phaser.Scene {
       .setDepth(5)
       .setStrokeStyle(2, 0xffffff);
 
+    this.add
+      .text(990, 90, `${this.difficulty.toUpperCase()}`, {
+        fontSize: "20px",
+        color: "#ffffff",
+        fontStyle: "bold",
+      })
+      .setOrigin(1, 0)
+      .setDepth(20);
+
     const menuText = this.add
       .text(457, 11, "Main menu", {
         fontSize: getResponsiveFontSize(20),
@@ -633,7 +644,7 @@ export class FightScene extends Phaser.Scene {
         this.sound.stopAll();
         this.tweens.killAll();
         this.scene.stop("FightScene");
-        this.scene.start("CharacterSelectScene");
+        this.scene.start("MenuScene");
       });
 
     menuText.on("pointerover", () => {
@@ -792,7 +803,7 @@ export class FightScene extends Phaser.Scene {
 
     // Start the fight
 
-    fight(this.player, this.opponent, this);
+    fight(this.player, this.opponent, this, this.difficulty);
   }
 
   update() {

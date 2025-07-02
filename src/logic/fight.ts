@@ -3,11 +3,20 @@ import { validateLife } from "./validateLife";
 import { cpuTurn } from "./cpuTurn";
 import { playerTurn } from "./playerTurn";
 import { FightScene } from "../scenes/FightScene";
+import type { Difficulty } from "../types/types";
+
+/**
+ * Initiates a fight between two fighters.
+ * @param fighter1 - The first fighter.
+ * @param fighter2 - The second fighter.
+ * @param scene - The fight scene where the fight takes place.
+ */
 
 export async function fight(
   fighter1: Fighter,
   fighter2: Fighter,
   scene: FightScene,
+  difficulty: Difficulty,
 ): Promise<void> {
   await fighter1.log(`The fight begins!`);
 
@@ -24,12 +33,12 @@ export async function fight(
       await playerTurn(fighter1, fighter2, scene);
       if (!validateLife(fighter2)) break;
 
-      await cpuTurn(fighter2, fighter1, scene);
+      await cpuTurn(fighter2, fighter1, scene, difficulty);
       if (!validateLife(fighter1)) break;
     } else if (fighter2.getSpeed() > fighter1.getSpeed()) {
       await fighter2.log(`${fighter2.name} is faster, attacks first!`);
 
-      await cpuTurn(fighter2, fighter1, scene);
+      await cpuTurn(fighter2, fighter1, scene, difficulty);
       if (!validateLife(fighter1)) break;
       await playerTurn(fighter1, fighter2, scene);
       if (!validateLife(fighter2)) break;
@@ -39,10 +48,10 @@ export async function fight(
         await playerTurn(fighter1, fighter2, scene);
         if (!validateLife(fighter2)) break;
 
-        await cpuTurn(fighter2, fighter1, scene);
+        await cpuTurn(fighter2, fighter1, scene, difficulty);
         if (!validateLife(fighter1)) break;
       } else {
-        await cpuTurn(fighter2, fighter1, scene);
+        await cpuTurn(fighter2, fighter1, scene, difficulty);
         if (!validateLife(fighter1)) break;
 
         await playerTurn(fighter1, fighter2, scene);
