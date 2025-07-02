@@ -6,4 +6,4 @@ export interface FightSceneData {
   difficulty: Difficulty;
 }
 
-export type Difficulty = "easy" | "normal";
+export type Difficulty = "easy" | "normal" | "hard";

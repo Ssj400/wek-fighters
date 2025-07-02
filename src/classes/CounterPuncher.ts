@@ -44,6 +44,7 @@ export class CounterPuncher extends Fighter {
   ): Promise<void> {
     if (this.isCurrentlyBlocking()) {
       await this.log(`${this.name} successfully blocked the attack!\n`);
+      this.setLastMove("block");
       if (this.onBlockCallback) this.onBlockCallback();
       return;
     } else if (await this.dodgeAttack()) {
@@ -83,6 +84,7 @@ export class CounterPuncher extends Fighter {
       this.stamina >= 20
     ) {
       await this.log(`${this.name} has counter punched ${oponent.name}!\n`);
+      this.setLastMove("attack");
       if (this.onCounterCallback) this.onCounterCallback();
       await oponent.receiveDamage(
         Number((this.strength * 3 * this.vulnerabilityIndex).toFixed(2)),

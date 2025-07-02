@@ -17,6 +17,7 @@ export class Fighter {
   protected onDodgeCallback?: () => void;
   protected onBlockCallback?: () => void;
   protected lastDamage: number = 0;
+  private lastMove: "attack" | "block" | "dodge" | "recover" | "none" = "none";
 
   constructor(
     name: string,
@@ -92,6 +93,7 @@ export class Fighter {
     if (attack.staminaCost)
       this.stamina = Math.max(this.stamina - attack.staminaCost, 0);
     await attack.execute(this, target);
+    this.setLastMove("attack");
     this.isBlocking = false;
   }
 
@@ -106,6 +108,7 @@ export class Fighter {
   async receiveDamage(damage: number, oponent: Fighter): Promise<void> {
     if (this.isCurrentlyBlocking()) {
       await this.log(`${this.name} successfully blocked the attack!`);
+      this.setLastMove("block");
       if (this.onBlockCallback) this.onBlockCallback();
       return;
     } else if (await this.dodgeAttack()) {
@@ -149,6 +152,7 @@ export class Fighter {
   async block(): Promise<void> {
     const blockChance = Math.random();
     await this.log(`${this.name} covers!`);
+    this.setLastMove("block");
     this.stamina -= 5;
     if (blockChance > this.blockFail) {
       this.isBlocking = true;
@@ -164,6 +168,7 @@ export class Fighter {
       this.health = Math.min(this.health + recoveryAmount, 100);
     if (this.stamina < 100) this.stamina = Math.min(this.stamina + 10, 100);
     await this.log(`${this.name} has recovered health and stamina!`);
+    this.setLastMove("recover");
     if (this.health > 100) this.health = 100;
     if (this.stamina > 100) this.stamina = 100;
   }
@@ -187,6 +192,7 @@ export class Fighter {
     if (Math.random() < chance) {
       await this.log(`${this.name} dodged the attack!!!`);
       if (this.onDodgeCallback) this.onDodgeCallback();
+      this.setLastMove("dodge");
       return true;
     }
     return false;
@@ -274,6 +280,14 @@ export class Fighter {
 
   setOnBlockCallback(cb: () => void) {
     this.onBlockCallback = cb;
+  }
+
+  getLastMove(): "attack" | "block" | "dodge" | "recover" | "none" {
+    return this.lastMove;
+  }
+
+  setLastMove(move: "attack" | "block" | "dodge" | "recover" | "none"): void {
+    this.lastMove = move;
   }
 
   protected createInstance(): Fighter {

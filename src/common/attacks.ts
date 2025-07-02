@@ -97,7 +97,7 @@ export const cross: Attack = {
 export const divineUppercut: Attack = {
   name: "Divine Uppercut",
   staminaCost: 30,
-  basePower: 1000,
+  basePower: 0,
   criticChance: 0,
   description:
     "A god prayer that,\nif successful, will strike\nthe opponent with divine\npower.*SPECIAL* Has a 0.1%\nchance to strike the\nopponent with divine power.",

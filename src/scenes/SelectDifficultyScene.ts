@@ -24,7 +24,7 @@ export class SelectDifficultyScene extends Phaser.Scene {
     addFullScreenButton(this, 50, 50);
 
     this.add
-      .text(500, 200, "Select Difficulty", {
+      .text(500, 150, "Select Difficulty", {
         fontSize: "36px",
         color: "#ffffff",
         fontStyle: "bold",
@@ -32,7 +32,7 @@ export class SelectDifficultyScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     const easyButton = this.add
-      .text(500, 300, "Easy", {
+      .text(500, 250, "Easy", {
         fontSize: "32px",
         color: "#ffffff",
       })
@@ -53,7 +53,7 @@ export class SelectDifficultyScene extends Phaser.Scene {
     });
 
     const normalButton = this.add
-      .text(500, 400, "Normal", {
+      .text(500, 350, "Normal", {
         fontSize: "32px",
         color: "#ffffff",
       })
@@ -71,6 +71,27 @@ export class SelectDifficultyScene extends Phaser.Scene {
     });
     normalButton.on("pointerout", () => {
       normalButton.setStyle({ fill: "#ffffff" });
+    });
+
+    const hardButton = this.add
+      .text(500, 450, "Hard", {
+        fontSize: "32px",
+        color: "#ffffff",
+      })
+      .setOrigin(0.5)
+      .setInteractive()
+      .on("pointerdown", () => {
+        this.difficulty = "hard";
+        playSound(this, "click", { volume: 0.5 });
+        this.scene.start("CharacterSelectScene", {
+          difficulty: this.difficulty,
+        });
+      });
+    hardButton.on("pointerover", () => {
+      hardButton.setStyle({ fill: "#ff0" });
+    });
+    hardButton.on("pointerout", () => {
+      hardButton.setStyle({ fill: "#ffffff" });
     });
   }
 

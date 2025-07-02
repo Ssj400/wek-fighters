@@ -42,6 +42,7 @@ export class Defender extends Fighter {
   ): Promise<void> {
     if (this.isCurrentlyBlocking()) {
       await this.log(`${this.name} successfully blocked the attack!`);
+      this.setLastMove("block");
       if (this.onBlockCallback) this.onBlockCallback();
       return;
     } else if (await this.dodgeAttack()) {

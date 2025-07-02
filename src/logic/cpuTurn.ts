@@ -8,12 +8,20 @@ export async function cpuTurn(
   scene: FightScene,
   difficulty: Difficulty,
 ): Promise<void> {
-  if (difficulty === "normal") {
-    await normalCpu(cpu, player, scene);
-    return;
+  switch (difficulty) {
+    case "easy":
+      await easyCpu(cpu, player, scene);
+      break;
+    case "normal":
+      await normalCpu(cpu, player, scene);
+      break;
+    case "hard":
+      await hardCpu(cpu, player, scene);
+      break;
+    default:
+      await easyCpu(cpu, player, scene);
+      break;
   }
-  await easyCpu(cpu, player, scene);
-  return;
 }
 
 export async function easyCpu(
@@ -87,4 +95,57 @@ export async function normalCpu(
     await cpu.block();
     await scene.animateBlock(scene.opponentSprite);
   }
+}
+
+export async function hardCpu(
+  cpu: Fighter,
+  player: Fighter,
+  scene: FightScene,
+): Promise<void> {
+  await cpu.log(`${cpu.name}'s turn!`);
+
+  const attacks = cpu.getAttackNames();
+  const cpuHealth = cpu.getHealth();
+  const cpuStamina = cpu.getStamina();
+  const playerStamina = player.getStamina();
+  const playerLastMove = player.getLastMove();
+
+  const jab = attacks.find((a) => a.name === "Jab");
+  const strongestAttack = attacks
+    .filter((a) => a.staminaCost <= cpuStamina)
+    .sort((a, b) => b.basePower - a.basePower)[0];
+
+  if (playerLastMove === "block" && cpuStamina >= 10 && cpuHealth > 20) {
+    await scene.animateAttackOponent(scene.opponentSprite);
+    await cpu.useAttack("Jab", player);
+    return;
+  }
+
+  if (cpuStamina < 10 || cpuHealth < 30) {
+    await scene.animateRecoverHealth(scene.opponentSprite);
+    await cpu.recoverHealth();
+    scene.updateStats();
+    return;
+  }
+
+  if (playerStamina < 10 && cpuStamina >= strongestAttack.staminaCost + 10) {
+    await scene.animateAttackOponent(scene.opponentSprite);
+    await cpu.useAttack(strongestAttack.name, player);
+    return;
+  }
+
+  if (!strongestAttack && jab && cpuStamina >= jab.staminaCost) {
+    await scene.animateAttackOponent(scene.opponentSprite);
+    await cpu.useAttack(jab.name, player);
+    return;
+  }
+
+  if (strongestAttack) {
+    await scene.animateAttackOponent(scene.opponentSprite);
+    await cpu.useAttack(strongestAttack.name, player);
+    return;
+  }
+
+  await cpu.block();
+  await scene.animateBlock(scene.opponentSprite);
 }
