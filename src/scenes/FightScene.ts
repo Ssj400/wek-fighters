@@ -3,7 +3,7 @@ import { Fighter } from "../classes/Fighter";
 import { fight } from "../logic/fight";
 import { playerTurn } from "../logic/playerTurn";
 import { CounterPuncher } from "../classes/CounterPuncher";
-import { addMuteButton } from "../common/uiHelpers";
+import { addMuteButton, addFullScreenButton } from "../common/uiHelpers";
 import { playSound } from "../common/sound";
 import type { FightSceneData } from "../types/types";
 
@@ -600,6 +600,7 @@ export class FightScene extends Phaser.Scene {
       return `${Math.round((base * this.scale.width) / 1000)}px`;
     };
     addMuteButton(this, 440, 30);
+    addFullScreenButton(this, 535, 26);
 
     playSound(this, "ready", {
       volume: 1,

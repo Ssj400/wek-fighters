@@ -25,3 +25,34 @@ export function addMuteButton(scene: Phaser.Scene, x: number, y: number) {
 
   return soundButton;
 }
+
+export function addFullScreenButton(scene: Phaser.Scene, x: number, y: number) {
+  const fullScreenButton = scene.add
+    .text(x, y, "⛶", {
+      fontSize: "24px",
+      color: "#fff",
+      padding: { x: 10, y: 5 },
+    })
+    .setInteractive()
+    .setDepth(100);
+
+  fullScreenButton.on("pointerdown", () => {
+    if (scene.scale.isFullscreen) {
+      scene.scale.stopFullscreen();
+    } else {
+      scene.scale.startFullscreen();
+    }
+  });
+
+  fullScreenButton.on("pointerover", () => {
+    fullScreenButton.setTint(0xffffaa);
+    fullScreenButton.setScale(1.1);
+  });
+
+  fullScreenButton.on("pointerout", () => {
+    fullScreenButton.clearTint();
+    fullScreenButton.setScale(1);
+  });
+
+  return fullScreenButton;
+}

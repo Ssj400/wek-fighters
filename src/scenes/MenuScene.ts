@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { addMuteButton } from "../common/uiHelpers";
+import { addFullScreenButton, addMuteButton } from "../common/uiHelpers";
 import { playSound } from "../common/sound";
 
 export class MenuScene extends Phaser.Scene {
@@ -30,6 +30,7 @@ export class MenuScene extends Phaser.Scene {
       volume: 0.5,
     });
     addMuteButton(this, 950, 50);
+    addFullScreenButton(this, 50, 50);
 
     this.add.particles(500, 300, "fire", {
       speed: { min: 100, max: 150 },

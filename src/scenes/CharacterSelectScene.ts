@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { Fighter } from "../classes/Fighter";
 import { createAllFighters } from "../common/fighters";
-import { addMuteButton } from "../common/uiHelpers";
+import { addFullScreenButton, addMuteButton } from "../common/uiHelpers";
 import { playSound } from "../common/sound";
 
 export class CharacterSelectScene extends Phaser.Scene {
@@ -50,6 +50,7 @@ export class CharacterSelectScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     addMuteButton(this, 950, 50);
+    addFullScreenButton(this, 50, 50);
 
     this.add
       .text(500, 290, "Description", {
