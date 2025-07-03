@@ -41,7 +41,7 @@ export class SelectDifficultyScene extends Phaser.Scene {
       .on("pointerdown", () => {
         this.difficulty = "easy";
         playSound(this, "click", { volume: 0.5 });
-        this.scene.start("CharacterSelectScene", {
+        this.scene.start("LoadingMenuScene", {
           difficulty: this.difficulty,
         });
       });
@@ -62,7 +62,7 @@ export class SelectDifficultyScene extends Phaser.Scene {
       .on("pointerdown", () => {
         this.difficulty = "normal";
         playSound(this, "click", { volume: 0.5 });
-        this.scene.start("CharacterSelectScene", {
+        this.scene.start("LoadingMenuScene", {
           difficulty: this.difficulty,
         });
       });
@@ -83,7 +83,7 @@ export class SelectDifficultyScene extends Phaser.Scene {
       .on("pointerdown", () => {
         this.difficulty = "hard";
         playSound(this, "click", { volume: 0.5 });
-        this.scene.start("CharacterSelectScene", {
+        this.scene.start("LoadingMenuScene", {
           difficulty: this.difficulty,
         });
       });

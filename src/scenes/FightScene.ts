@@ -571,32 +571,6 @@ export class FightScene extends Phaser.Scene {
     });
   }
 
-  preload() {
-    this.load.image("background-ring", "assets/ringBackground.jpg");
-
-    this.load.image("mati", "assets/mati.png");
-    this.load.image("juan", "assets/juan.png");
-    this.load.image("alan", "assets/alan.png");
-    this.load.image("jefte", "assets/jefte.png");
-    this.load.image("sound-icon", "assets/sound-icon.png");
-    this.load.image("mute-icon", "assets/mute-icon.png");
-
-    this.load.image("blood", "assets/blood.png");
-
-    this.load.audio("punch", "assets/sfx/punch.mp3");
-    this.load.audio("ready", "assets/sfx/ready.mp3");
-    this.load.audio(
-      "fight-song",
-      `assets/sfx/fight-song-${Math.floor(Math.random() * 2) + 1}.mp3`,
-    );
-    this.load.audio("crowd", "assets/sfx/crowd.mp3");
-    this.load.audio("heal", "assets/sfx/heal.mp3");
-    this.load.audio("recover-stamina", "assets/sfx/recover-stamina.mp3");
-    this.load.audio("block", "assets/sfx/block.mp3");
-    this.load.audio("dodge", "assets/sfx/dodge.mp3");
-    this.load.audio("action-sound", "assets/sfx/action-sound.mp3");
-  }
-
   create() {
     const getResponsiveFontSize = (base: number) => {
       return `${Math.round((base * this.scale.width) / 1000)}px`;
