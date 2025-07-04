@@ -11,6 +11,7 @@ export class Fighter {
   protected rageSuceptibility: boolean;
   protected attacks: Record<string, Attack> = {};
   protected vulnerabilityIndex: number;
+  protected dodgePotenciator: number = 0;
   private logger: (msg: string) => Promise<void>;
   protected onDamageCallback?: () => Promise<void>;
   protected onDeathCallback?: () => void;
@@ -105,13 +106,25 @@ export class Fighter {
     return this.strength;
   }
 
+  async increaseDodgePotenciator(amount: number): Promise<void> {
+    this.dodgePotenciator += amount / 10;
+    if (this.dodgePotenciator > 0.3) {
+      this.dodgePotenciator = 0.3;
+      await this.log(`${this.name} cannot increase evasion anymore!`);
+      return;
+    }
+
+    await this.log(`${this.name} increases his evasion!`);
+    return;
+  }
+
   async receiveDamage(damage: number, oponent: Fighter): Promise<void> {
     if (this.isCurrentlyBlocking()) {
       await this.log(`${this.name} successfully blocked the attack!`);
       this.setLastMove("block");
       if (this.onBlockCallback) this.onBlockCallback();
       return;
-    } else if (await this.dodgeAttack()) {
+    } else if (await this.dodgeAttack(this.dodgePotenciator)) {
       oponent.updateVulnerabilityIndex(0.05);
       oponent.updateStamina(-5);
       return;
@@ -184,11 +197,9 @@ export class Fighter {
   }
 
   async dodgeAttack(chancePotenciator: number = 0): Promise<boolean> {
-    const fatiguePenalty = this.stamina < 30 ? -0.3 : 0;
-    const chance = Math.min(
-      0.6,
-      chancePotenciator + this.speed / 200 + fatiguePenalty,
-    );
+    const fatiguePenalty = this.stamina < 20 ? -0.3 : 0;
+    const chance =
+      Math.min(0.6, this.speed / 200 + fatiguePenalty) + chancePotenciator;
     if (Math.random() < chance) {
       await this.log(`${this.name} dodged the attack!!!`);
       if (this.onDodgeCallback) this.onDodgeCallback();
@@ -207,12 +218,21 @@ export class Fighter {
     return Math.max(this.health, 0);
   }
 
+  increaseHealth(amount: number): void {
+    this.health = Math.min(this.health + amount, 100);
+    if (this.health > 100) this.health = 100;
+  }
+
   getSpeed(): number {
     return this.speed;
   }
 
   getBlockFail(): number {
     return this.blockFail;
+  }
+
+  getDodgePotenciator(): number {
+    return this.dodgePotenciator;
   }
 
   checkIfTired(): boolean {

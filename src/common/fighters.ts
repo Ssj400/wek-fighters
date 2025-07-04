@@ -1,6 +1,7 @@
 import { CounterPuncher } from "../classes/CounterPuncher";
 import { Defender } from "../classes/Defender";
 import { Fighter } from "../classes/Fighter";
+import { OutBoxer } from "../classes/OutBoxer";
 import { Puncher } from "../classes/Puncher";
 import {
   cross,
@@ -9,6 +10,7 @@ import {
   llamaLeftHook,
   rightOverhand,
   sabuesoKiller,
+  bunnyHop,
 } from "../common/attacks";
 
 const dummyLogger = async (_msg: string): Promise<void> => {
@@ -85,7 +87,24 @@ const baseFighters: Record<string, Fighter> = (() => {
     "Llama left hook": llamaLeftHook,
   });
 
-  return { Mati: mati, Juan: juan, Alan: alan, Jefte: jefte };
+  const gaspar = new OutBoxer(
+    "Gaspar",
+    100,
+    10,
+    50,
+    0.1,
+    false,
+    false,
+    1.1,
+    dummyLogger,
+  );
+  gaspar.setAttack({
+    Jab: jab,
+    Cross: cross,
+    "Bunny Hop": bunnyHop,
+  });
+
+  return { Mati: mati, Juan: juan, Alan: alan, Jefte: jefte, Gaspar: gaspar };
 })();
 
 export function createAllFighters(): Record<string, Fighter> {

@@ -11,7 +11,7 @@ export class OutBoxer extends Fighter {
     blockFail: number = 0,
     isBlocking: boolean = false,
     rageSuceptibility: boolean = false,
-    vulnerabilityIndex: number = 0.9,
+    vulnerabilityIndex: number = 1.1,
     logger: (msg: string) => Promise<void>,
   ) {
     super(
@@ -42,7 +42,7 @@ export class OutBoxer extends Fighter {
     }
 
     if (this.jabCount > 2 && this.stamina > 30 && this.health > 15) {
-      this.distanceControlTurnsLeft = 1;
+      this.distanceControlTurnsLeft = 2;
       this.jabCount = 0;
       await this.log(`${this.name} has measured the distance!`);
       await this.log(`${this.name} uses distance control!`);

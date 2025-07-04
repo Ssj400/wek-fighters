@@ -188,3 +188,18 @@ export const llamaLeftHook: Attack = {
     target.updateVulnerabilityIndex(0.05);
   },
 };
+
+export const bunnyHop: Attack = {
+  name: "Bunny Hop",
+  staminaCost: 20,
+  basePower: 0,
+  criticChance: 0,
+  description:
+    "A defensive move that\nallows the fighter to increase\ndodge capabilities and and recover some\nhealth.\n*SPECIAL* If successful,\nrecovers some health points.",
+  execute: async (attacker, _target) => {
+    await attacker.log(`${attacker.name} hops like a bunny!`);
+    await attacker.increaseDodgePotenciator(2);
+    attacker.increaseHealth(5);
+    attacker.updateVulnerabilityIndex(0.1);
+  },
+};

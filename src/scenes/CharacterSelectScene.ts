@@ -90,11 +90,12 @@ export class CharacterSelectScene extends Phaser.Scene {
           "Coming directly from the great\nINCA EMPIRE, throughout all his\ntravels on the peruvian deserts among\nthe llamas, he learned secret techniques\nthat could destroy any kind of\nspecies.\nSPECIALTY: DEFENDER\n",
       },
       {
-        key: "Coming soon",
-        name: "Coming soon!",
+        key: "Gaspar",
+        name: "Gaspar",
         x: 800,
         y: 420,
-        description: "",
+        description:
+          "An ancient warrior from the\nbunny lands of the east.\nHe has been training for centuries\nand is now a master of the\nbunny tricks. If he measures\nthe distance, his power gets increased\n(distance control condition: 3\nconsecutive jabs)\nSPECIALTY: OUTBOXER\n",
       },
       {
         key: "Coming soon",

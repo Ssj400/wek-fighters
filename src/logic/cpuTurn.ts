@@ -109,6 +109,7 @@ export async function hardCpu(
   const cpuStamina = cpu.getStamina();
   const playerStamina = player.getStamina();
   const playerLastMove = player.getLastMove();
+  const playerHealth = player.getHealth();
 
   const jab = attacks.find((a) => a.name === "Jab");
   const strongestAttack = attacks
@@ -121,7 +122,10 @@ export async function hardCpu(
     return;
   }
 
-  if (cpuStamina < 10 || cpuHealth < 30) {
+  if (
+    cpuStamina < 10 ||
+    (cpuHealth < 30 && playerHealth > 30 && Math.random() < 0.65)
+  ) {
     await scene.animateRecoverHealth(scene.opponentSprite);
     await cpu.recoverHealth();
     scene.updateStats();

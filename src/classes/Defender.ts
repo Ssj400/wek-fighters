@@ -45,7 +45,7 @@ export class Defender extends Fighter {
       this.setLastMove("block");
       if (this.onBlockCallback) this.onBlockCallback();
       return;
-    } else if (await this.dodgeAttack()) {
+    } else if (await this.dodgeAttack(this.dodgePotenciator)) {
       oponent.updateVulnerabilityIndex(0.05);
       oponent.updateStamina(-5);
       return;
