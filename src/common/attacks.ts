@@ -144,7 +144,7 @@ export const sabuesoKiller: Attack = {
 
 export const rightOverhand: Attack = {
   name: "Right Overhand",
-  staminaCost: 25,
+  staminaCost: 50,
   basePower: 20,
   criticChance: 0.15,
   description:

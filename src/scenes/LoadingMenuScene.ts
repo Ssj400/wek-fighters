@@ -24,7 +24,7 @@ export class LoadingMenuScene extends Phaser.Scene {
       delay: 500,
       loop: true,
       callback: () => {
-        this.dotCount = (this.dotCount + 1) % 4; // 0,1,2,3
+        this.dotCount = (this.dotCount + 1) % 4;
         this.loadingText?.setText("Loading" + ".".repeat(this.dotCount));
       },
     });

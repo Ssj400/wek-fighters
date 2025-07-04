@@ -5,13 +5,6 @@ import { playerTurn } from "./playerTurn";
 import { FightScene } from "../scenes/FightScene";
 import type { Difficulty } from "../types/types";
 
-/**
- * Initiates a fight between two fighters.
- * @param fighter1 - The first fighter.
- * @param fighter2 - The second fighter.
- * @param scene - The fight scene where the fight takes place.
- */
-
 export async function fight(
   fighter1: Fighter,
   fighter2: Fighter,
