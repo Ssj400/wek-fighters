@@ -1,4 +1,5 @@
 import { Fighter } from "../classes/Fighter";
+import { Logger } from "../common/Logger";
 
 type FighterStyle = "Puncher" | "CounterPuncher" | "OutBoxer";
 
@@ -14,8 +15,8 @@ export class MixtFighter extends Fighter {
     blockFail: number = 0,
     isBlocking: boolean = false,
     rageSuceptibility: boolean = false,
-    vulnerabilityIndex: number = 1.1,
-    logger: (msg: string) => Promise<void>,
+    vulnerabilityIndex: number = 0.9,
+    logger?: Logger,
   ) {
     super(
       name,

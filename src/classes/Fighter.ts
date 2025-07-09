@@ -1,3 +1,4 @@
+import { Logger } from "../common/Logger";
 import type { Attack } from "../common/attacks";
 import { validateLife } from "../logic/validateLife";
 export class Fighter {
@@ -12,7 +13,7 @@ export class Fighter {
   protected attacks: Record<string, Attack> = {};
   protected vulnerabilityIndex: number;
   protected dodgePotenciator: number = 0;
-  private logger: (msg: string) => Promise<void>;
+  private logger?: Logger;
   protected onDamageCallback?: () => Promise<void>;
   protected onDeathCallback?: () => void;
   protected onDodgeCallback?: () => void;
@@ -29,9 +30,7 @@ export class Fighter {
     isBlocking: boolean = false,
     rageSuceptibility: boolean = false,
     vulnerabilityIndex: number = 0.7,
-    logger: (msg: string) => Promise<void> = async () => {
-      return;
-    },
+    logger?: Logger,
   ) {
     this.name = name;
     this.health = health;
@@ -260,14 +259,14 @@ export class Fighter {
   }
 
   log(msg: string): Promise<void> {
-    return this.logger(msg);
+    return this.logger?.info(msg) ?? Promise.resolve();
   }
 
-  setLogger(logger: (msg: string) => Promise<void>): void {
+  setLogger(logger: Logger): void {
     this.logger = logger;
   }
 
-  getLogger(): (msg: string) => Promise<void> {
+  getLogger(): Logger | undefined {
     return this.logger;
   }
 
@@ -284,7 +283,7 @@ export class Fighter {
         Object.entries(this.attacks).map(([k, v]) => [k, { ...v }]),
       ),
     );
-    clone.setLogger(this.logger);
+    clone.setLogger(this.logger as Logger);
     return clone;
   }
 

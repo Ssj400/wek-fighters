@@ -1,4 +1,5 @@
 import { Fighter } from "./Fighter";
+import { Logger } from "../common/Logger";
 
 export class CounterPuncher extends Fighter {
   counterIndex: number;
@@ -14,7 +15,7 @@ export class CounterPuncher extends Fighter {
     counterIndex: number,
     rageSuceptibility: boolean = false,
     vulnerabilityIndex: number = 0.8,
-    logger: (msg: string) => Promise<void>,
+    logger?: Logger,
   ) {
     super(
       name,
@@ -62,11 +63,7 @@ export class CounterPuncher extends Fighter {
         (damage * 1.2 * this.vulnerabilityIndex).toFixed(2),
       );
       await this.log(
-        `${this.name} has received ${(
-          damage *
-          1.2 *
-          this.vulnerabilityIndex
-        ).toFixed(2)} damage!\n`,
+        `${this.name} has received ${(damage * 1.2 * this.vulnerabilityIndex).toFixed(2)} damage!\n`,
       );
     } else {
       this.health -= Number((damage * this.vulnerabilityIndex).toFixed(2));

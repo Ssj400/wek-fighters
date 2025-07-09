@@ -5,6 +5,7 @@ import { playerTurn } from "../logic/playerTurn";
 import { CounterPuncher } from "../classes/CounterPuncher";
 import { addMuteButton, addFullScreenButton } from "../common/uiHelpers";
 import { playSound } from "../common/sound";
+import { Logger } from "../common/Logger";
 import type { Difficulty, FightSceneData } from "../types/types";
 
 export class FightScene extends Phaser.Scene {
@@ -13,6 +14,7 @@ export class FightScene extends Phaser.Scene {
   private fightText!: Phaser.GameObjects.Text;
   private messageQueue: { message: string; resolve: () => void }[] = [];
   private isShowingMessage = false;
+  private isWaitingForInput = false;
   private pendingActionResolve?: () => void;
   private continueArrow!: Phaser.GameObjects.Text;
   private player!: Fighter;
@@ -123,8 +125,13 @@ export class FightScene extends Phaser.Scene {
     }
     const { message, resolve } = next;
     await this.typeText(message);
+
+    if (this.isWaitingForInput) return;
+    this.isWaitingForInput = true;
+
     this.input.once("pointerdown", () => {
       resolve();
+      this.isWaitingForInput = false;
       this.showNextMessage();
     });
   }
@@ -650,7 +657,7 @@ export class FightScene extends Phaser.Scene {
     });
 
     //Set up the logger and background
-    const logger = (msg: string) => this.logToFightText(msg);
+    const logger = new Logger(this);
     this.player.setLogger(logger);
     this.opponent.setLogger(logger);
     this.add.image(400, 300, "background-ring").setOrigin(0.5, 0.5).setScale(2);

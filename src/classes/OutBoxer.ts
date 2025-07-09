@@ -1,4 +1,5 @@
 import { Fighter } from "./Fighter";
+import { Logger } from "../common/Logger";
 
 export class OutBoxer extends Fighter {
   jabCount: number;
@@ -12,7 +13,7 @@ export class OutBoxer extends Fighter {
     isBlocking: boolean = false,
     rageSuceptibility: boolean = false,
     vulnerabilityIndex: number = 1.1,
-    logger: (msg: string) => Promise<void>,
+    logger?: Logger,
   ) {
     super(
       name,

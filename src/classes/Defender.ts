@@ -1,4 +1,5 @@
 import { Fighter } from "./Fighter";
+import { Logger } from "../common/Logger";
 
 export class Defender extends Fighter {
   defense: number;
@@ -13,7 +14,7 @@ export class Defender extends Fighter {
     defense: number,
     rageSuceptibility: boolean = false,
     vulnerabilityIndex: number = 0.65,
-    logger: (msg: string) => Promise<void>,
+    logger?: Logger,
   ) {
     super(
       name,
