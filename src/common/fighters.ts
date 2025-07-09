@@ -11,6 +11,7 @@ import {
   rightOverhand,
   sabuesoKiller,
   bunnyHop,
+  lastResource,
 } from "../common/attacks";
 
 const dummyLogger = async (_msg: string): Promise<void> => {
@@ -118,6 +119,7 @@ const baseFighters: Record<string, Fighter> = (() => {
   jose.setAttack({
     Jab: jab,
     Cross: cross,
+    "Last Resource": lastResource,
   });
 
   return {

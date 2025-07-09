@@ -203,3 +203,45 @@ export const bunnyHop: Attack = {
     attacker.updateVulnerabilityIndex(0.1);
   },
 };
+
+export const lastResource: Attack = {
+  name: "Last Resource",
+  staminaCost: 0,
+  basePower: 10,
+  criticChance: 0.1,
+  description:
+    "The more desperate are your conditions, the more damage it deals (Leaves you with 0 stamina)",
+  execute: async (attacker, target) => {
+    await attacker.log(`${attacker.name} uses his last resource!`);
+    await attacker.setStamina(0);
+    if (attacker.getHealth() > 50) {
+      await attacker.log(
+        `${attacker.name} is not desperate enough to use this move!`,
+      );
+      return;
+    } else if (attacker.getHealth() > 20) {
+      await attacker.log(`${attacker.name} is a little desperate!`);
+      attacker.updateVulnerabilityIndex(-0.2);
+      await target.receiveDamage(
+        lastResource.basePower + attacker.getStrength(),
+        attacker,
+      );
+    } else if (attacker.getHealth() > 5) {
+      await attacker.log(`${attacker.name} is desperate!`);
+      attacker.updateVulnerabilityIndex(-0.3);
+      await target.receiveDamage(
+        (lastResource.basePower + attacker.getStrength()) * 1.2,
+        attacker,
+      );
+    } else {
+      await attacker.log(
+        `Anything matters anymore for ${attacker.name}! He is completely desperate!`,
+      );
+      attacker.updateVulnerabilityIndex(-0.4);
+      await target.receiveDamage(
+        (lastResource.basePower + attacker.getStrength()) * 1.6,
+        attacker,
+      );
+    }
+  },
+};

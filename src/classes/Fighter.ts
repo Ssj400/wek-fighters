@@ -271,6 +271,12 @@ export class Fighter {
     return this.logger;
   }
 
+  setStamina(stamina: number): void {
+    this.stamina = Math.max(0, Math.min(stamina, 100));
+    if (this.stamina > 100) this.stamina = 100;
+    if (this.stamina < 0) this.stamina = 0;
+  }
+
   clone(): Fighter {
     const clone = this.createInstance();
     clone.setAttack(
