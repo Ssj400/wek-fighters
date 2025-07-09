@@ -245,3 +245,22 @@ export const lastResource: Attack = {
     }
   },
 };
+
+export const swarm: Attack = {
+  name: "Swarm",
+  basePower: 20,
+  criticChance: 0,
+  description:
+    "A series of punches that\ncan overwhelm the opponent.\n*SPECIAL* Throws between one and 4 punches.",
+  staminaCost: 30,
+  execute: async (attacker, target) => {
+    await attacker.log(`${attacker.name} throws a lot of punches`);
+    const damage = await baseDamage(swarm, attacker, swarm.basePower);
+    const amount = Math.floor(Math.random() * 3);
+    await attacker.log(`${attacker.name} throws ${amount} punches!`);
+    for (let i = 4 - amount; i < 4; i++) {
+      await target.receiveDamage(damage, attacker);
+    }
+    target.updateVulnerabilityIndex(0.05);
+  },
+};
