@@ -102,7 +102,8 @@ export class CharacterSelectScene extends Phaser.Scene {
         name: "Jose",
         x: 200,
         y: 420,
-        description: "",
+        description:
+          "Directly from Venezuela, he is a\nmaster of the swarm attacks.\nHe can overwhelm his opponents with\nhis fast and furious punches.\nSPECIALTY: Mixt Fighter\n",
       },
     ];
 
