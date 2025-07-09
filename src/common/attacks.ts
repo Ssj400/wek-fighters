@@ -255,11 +255,12 @@ export const swarm: Attack = {
   staminaCost: 30,
   execute: async (attacker, target) => {
     await attacker.log(`${attacker.name} throws a lot of punches`);
-    const damage = await baseDamage(swarm, attacker, swarm.basePower);
-    const amount = Math.floor(Math.random() * 3);
+    let damage = await baseDamage(swarm, attacker, swarm.basePower);
+    const amount = Math.floor(Math.random() * 3) + 1;
     await attacker.log(`${attacker.name} throws ${amount} punches!`);
     for (let i = 4 - amount; i < 4; i++) {
       await target.receiveDamage(damage, attacker);
+      damage = await baseDamage(swarm, attacker, swarm.basePower);
     }
     target.updateVulnerabilityIndex(0.05);
   },
