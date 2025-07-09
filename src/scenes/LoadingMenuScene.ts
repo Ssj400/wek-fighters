@@ -39,6 +39,7 @@ export class LoadingMenuScene extends Phaser.Scene {
     this.load.image("Alan-selection", "assets/alan-selection.png");
     this.load.image("Jefte-selection", "assets/jefte-selection.png");
     this.load.image("Gaspar-selection", "assets/gaspar-selection.png");
+    this.load.image("Jose-selection", "assets/jose-selection.png");
     this.load.image("question-mark", "assets/question-mark.png");
     this.load.image("sound-icon", "assets/sound-icon.png");
     this.load.image("mute-icon", "assets/mute-icon.png");

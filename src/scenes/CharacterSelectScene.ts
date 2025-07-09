@@ -98,8 +98,8 @@ export class CharacterSelectScene extends Phaser.Scene {
           "An ancient warrior from the\nbunny lands of the east.\nHe has been training for centuries\nand is now a master of the\nbunny tricks. If he measures\nthe distance, his power gets increased\n(distance control condition: 3\nconsecutive jabs)\nSPECIALTY: OUTBOXER\n",
       },
       {
-        key: "Coming soon",
-        name: "Coming soon!",
+        key: "Jose",
+        name: "Jose",
         x: 200,
         y: 420,
         description: "",

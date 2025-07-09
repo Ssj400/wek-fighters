@@ -104,7 +104,30 @@ const baseFighters: Record<string, Fighter> = (() => {
     "Bunny Hop": bunnyHop,
   });
 
-  return { Mati: mati, Juan: juan, Alan: alan, Jefte: jefte, Gaspar: gaspar };
+  const jose = new Fighter(
+    "Jose",
+    100,
+    60,
+    50,
+    0.1,
+    false,
+    false,
+    1,
+    dummyLogger,
+  );
+  jose.setAttack({
+    Jab: jab,
+    Cross: cross,
+  });
+
+  return {
+    Mati: mati,
+    Juan: juan,
+    Alan: alan,
+    Jefte: jefte,
+    Gaspar: gaspar,
+    Jose: jose,
+  };
 })();
 
 export function createAllFighters(): Record<string, Fighter> {
