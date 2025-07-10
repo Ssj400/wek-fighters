@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Wekito Fighters</string>
+    <string name="title_activity_main">Wekito Fighters</string>
+    <string name="package_name">com.fighters.wekito</string>
+    <string name="custom_url_scheme">com.fighters.wekito</string>
+</resources>
