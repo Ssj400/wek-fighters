@@ -40,8 +40,6 @@ export class FightScene extends Phaser.Scene {
 
   init(data: FightSceneData) {
     this.initialData = data;
-    this.player = data.player.clone();
-    this.opponent = data.opponent.clone();
     this.difficulty = data.difficulty;
 
     this.fightMessages = [];
@@ -657,9 +655,14 @@ export class FightScene extends Phaser.Scene {
     });
 
     //Set up the logger and background
-    const logger = new Logger(this);
-    this.player.setLogger(logger);
-    this.opponent.setLogger(logger);
+    const playerLogger = new Logger(this, this.initialData.player.name);
+    const opponentLogger = new Logger(this, this.initialData.opponent.name);
+
+    this.initialData.player.setLogger(playerLogger);
+    this.initialData.opponent.setLogger(opponentLogger);
+
+    this.player = this.initialData.player.clone();
+    this.opponent = this.initialData.opponent.clone();
     this.add.image(400, 300, "background-ring").setOrigin(0.5, 0.5).setScale(2);
 
     //Create player and opponent sprites

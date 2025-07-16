@@ -16,7 +16,7 @@ export class Defender extends Fighter {
     defense: number,
     rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
     vulnerabilityIndex: number = defaultValues.defender.vulnerabilityIndex,
-    logger?: Logger,
+    logger: Logger,
   ) {
     super(
       name,

@@ -17,7 +17,7 @@ export class MixtFighter extends Fighter {
     isBlocking: boolean = defaultValues.common.isBlocking,
     rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
     vulnerabilityIndex: number = defaultValues.mixtFighter.vulnerabilityIndex,
-    logger?: Logger,
+    logger: Logger,
   ) {
     super(
       name,

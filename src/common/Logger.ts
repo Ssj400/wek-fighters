@@ -1,26 +1,32 @@
 import { FightScene } from "../scenes/FightScene";
 
-type LogTarget = (message: string) => Promise<void>;
-
 export class Logger {
-  private logToFightText: LogTarget;
+  private context: string;
+  private scene: FightScene | null;
 
-  constructor(scene: FightScene) {
-    this.logToFightText = scene.logToFightText.bind(scene);
+  constructor(scene: FightScene | null, context: string) {
+    this.scene = scene;
+    this.context = context;
+  }
+
+  private async logToFightText(message: string): Promise<void> {
+    if (this.scene) {
+      await this.scene.logToFightText(message);
+    }
   }
 
   async info(message: string) {
-    console.log(`[INFO] ${message}`);
+    console.log(`[${this.context}] ${message}`);
     await this.logToFightText(message);
   }
 
   async warning(message: string) {
-    console.warn(`[WARNING] ${message}`);
+    console.warn(`[${this.context}] ${message}`);
     await this.logToFightText(message);
   }
 
   async error(message: string) {
-    console.error(`[ERROR] ${message}`);
+    console.error(`[${this.context}] ${message}`);
     await this.logToFightText(message);
   }
 }

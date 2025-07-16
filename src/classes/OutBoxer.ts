@@ -14,7 +14,7 @@ export class OutBoxer extends Fighter {
     isBlocking: boolean = defaultValues.common.isBlocking,
     rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
     vulnerabilityIndex: number = defaultValues.outBoxer.vulnerabilityIndex,
-    logger?: Logger,
+    logger: Logger,
   ) {
     super(
       name,

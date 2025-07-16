@@ -15,7 +15,7 @@ export class Puncher extends Fighter {
     damageMultiplicator: number,
     rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
     vulnerabilityIndex: number = defaultValues.puncher.vulnerabilityIndex,
-    logger?: Logger,
+    logger: Logger,
   ) {
     super(
       name,
@@ -29,6 +29,7 @@ export class Puncher extends Fighter {
       logger,
     );
     this.damageMultiplicator = damageMultiplicator;
+    this.logger = logger;
   }
 
   override getStats(): string {

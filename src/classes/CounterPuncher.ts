@@ -18,7 +18,7 @@ export class CounterPuncher extends Fighter {
     rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
     vulnerabilityIndex: number = defaultValues.counterPuncher
       .vulnerabilityIndex,
-    logger?: Logger,
+    logger: Logger,
   ) {
     super(
       name,

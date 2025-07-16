@@ -16,7 +16,7 @@ export class Fighter {
   protected attacks: Record<string, Attack> = {};
   protected vulnerabilityIndex: number;
   protected dodgePotenciator: number = 0;
-  private logger?: Logger;
+  protected logger: Logger;
   protected onDamageCallback?: () => Promise<void>;
   protected onDeathCallback?: () => void;
   protected onDodgeCallback?: () => void;
@@ -33,7 +33,7 @@ export class Fighter {
     isBlocking: boolean = defaultValues.common.isBlocking,
     rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
     vulnerabilityIndex: number = defaultValues.fighter.vulnerabilityIndex,
-    logger?: Logger,
+    logger: Logger,
   ) {
     this.name = name;
     this.health = health;
@@ -262,14 +262,14 @@ export class Fighter {
   }
 
   log(msg: string): Promise<void> {
-    return this.logger?.info(msg) ?? Promise.resolve();
+    return this.logger.info(msg);
   }
 
   setLogger(logger: Logger): void {
     this.logger = logger;
   }
 
-  getLogger(): Logger | undefined {
+  getLogger(): Logger {
     return this.logger;
   }
 
@@ -286,7 +286,6 @@ export class Fighter {
         Object.entries(this.attacks).map(([k, v]) => [k, { ...v }]),
       ),
     );
-    if (this.logger) clone.setLogger(this.logger);
 
     return clone;
   }
