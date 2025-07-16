@@ -1,5 +1,6 @@
 import { Fighter } from "./Fighter";
 import { Logger } from "../common/Logger";
+import { defaultValues } from "../common/defaultValues";
 
 export class Puncher extends Fighter {
   damageMultiplicator: number;
@@ -9,11 +10,11 @@ export class Puncher extends Fighter {
     health: number,
     strength: number,
     speed: number,
-    blockFail: number = 0,
-    isBlocking: boolean = false,
+    blockFail: number = defaultValues.common.blockFail,
+    isBlocking: boolean = defaultValues.common.isBlocking,
     damageMultiplicator: number,
-    rageSuceptibility: boolean = false,
-    vulnerabilityIndex: number = 0.8,
+    rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
+    vulnerabilityIndex: number = defaultValues.puncher.vulnerabilityIndex,
     logger?: Logger,
   ) {
     super(

@@ -1,6 +1,7 @@
 import { Fighter } from "./Fighter";
 import { Logger } from "../common/Logger";
 import { FighterMoves } from "../types/types";
+import { defaultValues } from "../common/defaultValues";
 
 export class CounterPuncher extends Fighter {
   counterIndex: number;
@@ -11,11 +12,12 @@ export class CounterPuncher extends Fighter {
     health: number,
     strength: number,
     speed: number,
-    blockFail: number = 0,
-    isBlocking: boolean = false,
+    blockFail: number = defaultValues.common.blockFail,
+    isBlocking: boolean = defaultValues.common.isBlocking,
     counterIndex: number,
-    rageSuceptibility: boolean = false,
-    vulnerabilityIndex: number = 0.8,
+    rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
+    vulnerabilityIndex: number = defaultValues.counterPuncher
+      .vulnerabilityIndex,
     logger?: Logger,
   ) {
     super(

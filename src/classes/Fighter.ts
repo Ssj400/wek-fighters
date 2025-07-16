@@ -2,6 +2,7 @@ import { Logger } from "../common/Logger";
 import type { Attack } from "../common/attacks";
 import { validateLife } from "../logic/validateLife";
 import { FighterMoves } from "../types/types";
+import { defaultValues } from "../common/defaultValues";
 
 export class Fighter {
   public readonly name: string;
@@ -28,10 +29,10 @@ export class Fighter {
     health: number,
     strength: number,
     speed: number,
-    blockFail: number = 0,
-    isBlocking: boolean = false,
-    rageSuceptibility: boolean = false,
-    vulnerabilityIndex: number = 0.7,
+    blockFail: number = defaultValues.common.blockFail,
+    isBlocking: boolean = defaultValues.common.isBlocking,
+    rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
+    vulnerabilityIndex: number = defaultValues.fighter.vulnerabilityIndex,
     logger?: Logger,
   ) {
     this.name = name;

@@ -1,5 +1,6 @@
 import { Fighter } from "../classes/Fighter";
 import { Logger } from "../common/Logger";
+import { defaultValues } from "../common/defaultValues";
 
 type FighterStyle = "Puncher" | "CounterPuncher" | "OutBoxer";
 
@@ -12,10 +13,10 @@ export class MixtFighter extends Fighter {
     health: number,
     strength: number,
     speed: number,
-    blockFail: number = 0,
-    isBlocking: boolean = false,
-    rageSuceptibility: boolean = false,
-    vulnerabilityIndex: number = 0.9,
+    blockFail: number = defaultValues.common.blockFail,
+    isBlocking: boolean = defaultValues.common.isBlocking,
+    rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
+    vulnerabilityIndex: number = defaultValues.mixtFighter.vulnerabilityIndex,
     logger?: Logger,
   ) {
     super(

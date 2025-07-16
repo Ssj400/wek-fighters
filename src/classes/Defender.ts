@@ -1,6 +1,7 @@
 import { Fighter } from "./Fighter";
 import { Logger } from "../common/Logger";
 import { FighterMoves } from "../types/types";
+import { defaultValues } from "../common/defaultValues";
 
 export class Defender extends Fighter {
   defense: number;
@@ -10,11 +11,11 @@ export class Defender extends Fighter {
     health: number,
     strength: number,
     speed: number,
-    blockFail: number = 0,
-    isBlocking: boolean = false,
+    blockFail: number = defaultValues.common.blockFail,
+    isBlocking: boolean = defaultValues.common.isBlocking,
     defense: number,
-    rageSuceptibility: boolean = false,
-    vulnerabilityIndex: number = 0.65,
+    rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
+    vulnerabilityIndex: number = defaultValues.defender.vulnerabilityIndex,
     logger?: Logger,
   ) {
     super(
