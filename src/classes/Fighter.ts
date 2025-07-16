@@ -1,6 +1,8 @@
 import { Logger } from "../common/Logger";
 import type { Attack } from "../common/attacks";
 import { validateLife } from "../logic/validateLife";
+import { FighterMoves } from "../types/types";
+
 export class Fighter {
   public readonly name: string;
   protected health: number;
@@ -19,7 +21,7 @@ export class Fighter {
   protected onDodgeCallback?: () => void;
   protected onBlockCallback?: () => void;
   protected lastDamage: number = 0;
-  private lastMove: "attack" | "block" | "dodge" | "recover" | "none" = "none";
+  private lastMove: FighterMoves = FighterMoves.NONE;
 
   constructor(
     name: string,
@@ -93,7 +95,7 @@ export class Fighter {
     if (attack.staminaCost)
       this.stamina = Math.max(this.stamina - attack.staminaCost, 0);
     await attack.execute(this, target);
-    this.setLastMove("attack");
+    this.setLastMove(FighterMoves.ATTACK);
     this.isBlocking = false;
   }
 
@@ -120,7 +122,7 @@ export class Fighter {
   async receiveDamage(damage: number, oponent: Fighter): Promise<void> {
     if (this.isCurrentlyBlocking()) {
       await this.log(`${this.name} successfully blocked the attack!`);
-      this.setLastMove("block");
+      this.setLastMove(FighterMoves.BLOCK);
       if (this.onBlockCallback) this.onBlockCallback();
       return;
     } else if (await this.dodgeAttack(this.dodgePotenciator)) {
@@ -164,7 +166,7 @@ export class Fighter {
   async block(): Promise<void> {
     const blockChance = Math.random();
     await this.log(`${this.name} covers!`);
-    this.setLastMove("block");
+    this.setLastMove(FighterMoves.BLOCK);
     this.stamina -= 5;
     if (blockChance > this.blockFail) {
       this.isBlocking = true;
@@ -180,7 +182,7 @@ export class Fighter {
       this.health = Math.min(this.health + recoveryAmount, 100);
     if (this.stamina < 100) this.stamina = Math.min(this.stamina + 10, 100);
     await this.log(`${this.name} has recovered health and stamina!`);
-    this.setLastMove("recover");
+    this.setLastMove(FighterMoves.RECOVER);
     if (this.health > 100) this.health = 100;
     if (this.stamina > 100) this.stamina = 100;
   }
@@ -202,7 +204,7 @@ export class Fighter {
     if (Math.random() < chance) {
       await this.log(`${this.name} dodged the attack!!!`);
       if (this.onDodgeCallback) this.onDodgeCallback();
-      this.setLastMove("dodge");
+      this.setLastMove(FighterMoves.DODGE);
       return true;
     }
     return false;
@@ -283,7 +285,8 @@ export class Fighter {
         Object.entries(this.attacks).map(([k, v]) => [k, { ...v }]),
       ),
     );
-    clone.setLogger(this.logger as Logger);
+    if (this.logger) clone.setLogger(this.logger);
+
     return clone;
   }
 
@@ -307,11 +310,11 @@ export class Fighter {
     this.onBlockCallback = cb;
   }
 
-  getLastMove(): "attack" | "block" | "dodge" | "recover" | "none" {
+  getLastMove(): FighterMoves {
     return this.lastMove;
   }
 
-  setLastMove(move: "attack" | "block" | "dodge" | "recover" | "none"): void {
+  setLastMove(move: FighterMoves): void {
     this.lastMove = move;
   }
 

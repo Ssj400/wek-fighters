@@ -1,5 +1,6 @@
 import { Fighter } from "./Fighter";
 import { Logger } from "../common/Logger";
+import { FighterMoves } from "../types/types";
 
 export class Defender extends Fighter {
   defense: number;
@@ -43,7 +44,7 @@ export class Defender extends Fighter {
   ): Promise<void> {
     if (this.isCurrentlyBlocking()) {
       await this.log(`${this.name} successfully blocked the attack!`);
-      this.setLastMove("block");
+      this.setLastMove(FighterMoves.BLOCK);
       if (this.onBlockCallback) this.onBlockCallback();
       return;
     } else if (await this.dodgeAttack(this.dodgePotenciator)) {

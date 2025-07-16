@@ -7,3 +7,11 @@ export interface FightSceneData {
 }
 
 export type Difficulty = "easy" | "normal" | "hard";
+
+export enum FighterMoves {
+  ATTACK = "attack",
+  BLOCK = "block",
+  DODGE = "dodge",
+  RECOVER = "recover",
+  NONE = "none",
+}
