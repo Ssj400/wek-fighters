@@ -4,8 +4,6 @@ import { FighterMoves } from "../types/types";
 import { defaultValues } from "../common/defaultValues";
 
 export class Defender extends Fighter {
-  defense: number;
-
   constructor(
     name: string,
     health: number,
@@ -13,7 +11,7 @@ export class Defender extends Fighter {
     speed: number,
     blockFail: number = defaultValues.common.blockFail,
     isBlocking: boolean = defaultValues.common.isBlocking,
-    defense: number,
+    public defense: number,
     rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
     vulnerabilityIndex: number = defaultValues.defender.vulnerabilityIndex,
     logger: Logger,
@@ -29,7 +27,6 @@ export class Defender extends Fighter {
       vulnerabilityIndex,
       logger,
     );
-    this.defense = defense;
   }
   override getStats(): string {
     return `Statistics | fighter: ${this.name}, health: ${this.health}, strength: ${this.strength}, stamina: ${this.stamina} *SPECIAL* defense: ${this.defense}, speed: ${this.speed}\n`;

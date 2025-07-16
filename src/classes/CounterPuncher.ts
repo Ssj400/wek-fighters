@@ -4,7 +4,6 @@ import { FighterMoves } from "../types/types";
 import { defaultValues } from "../common/defaultValues";
 
 export class CounterPuncher extends Fighter {
-  counterIndex: number;
   private onCounterCallback?: () => void;
 
   constructor(
@@ -14,7 +13,7 @@ export class CounterPuncher extends Fighter {
     speed: number,
     blockFail: number = defaultValues.common.blockFail,
     isBlocking: boolean = defaultValues.common.isBlocking,
-    counterIndex: number,
+    public counterIndex: number,
     rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
     vulnerabilityIndex: number = defaultValues.counterPuncher
       .vulnerabilityIndex,
@@ -31,7 +30,6 @@ export class CounterPuncher extends Fighter {
       vulnerabilityIndex,
       logger,
     );
-    this.counterIndex = counterIndex;
   }
 
   override getStats(): string {

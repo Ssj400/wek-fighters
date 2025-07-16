@@ -3,8 +3,6 @@ import { Logger } from "../common/Logger";
 import { defaultValues } from "../common/defaultValues";
 
 export class Puncher extends Fighter {
-  damageMultiplicator: number;
-
   constructor(
     name: string,
     health: number,
@@ -12,7 +10,7 @@ export class Puncher extends Fighter {
     speed: number,
     blockFail: number = defaultValues.common.blockFail,
     isBlocking: boolean = defaultValues.common.isBlocking,
-    damageMultiplicator: number,
+    private damageMultiplicator: number,
     rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
     vulnerabilityIndex: number = defaultValues.puncher.vulnerabilityIndex,
     logger: Logger,
@@ -28,8 +26,6 @@ export class Puncher extends Fighter {
       vulnerabilityIndex,
       logger,
     );
-    this.damageMultiplicator = damageMultiplicator;
-    this.logger = logger;
   }
 
   override getStats(): string {

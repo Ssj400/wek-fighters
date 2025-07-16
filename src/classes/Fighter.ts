@@ -5,18 +5,9 @@ import { FighterMoves } from "../types/types";
 import { defaultValues } from "../common/defaultValues";
 
 export class Fighter {
-  public readonly name: string;
-  protected health: number;
-  protected strength: number;
-  protected speed: number;
-  protected stamina: number;
-  protected blockFail: number;
-  protected isBlocking: boolean;
-  protected rageSuceptibility: boolean;
+  protected stamina: number = defaultValues.common.stamina;
   protected attacks: Record<string, Attack> = {};
-  protected vulnerabilityIndex: number;
   protected dodgePotenciator: number = 0;
-  protected logger: Logger;
   protected onDamageCallback?: () => Promise<void>;
   protected onDeathCallback?: () => void;
   protected onDodgeCallback?: () => void;
@@ -25,27 +16,18 @@ export class Fighter {
   private lastMove: FighterMoves = FighterMoves.NONE;
 
   constructor(
-    name: string,
-    health: number,
-    strength: number,
-    speed: number,
-    blockFail: number = defaultValues.common.blockFail,
-    isBlocking: boolean = defaultValues.common.isBlocking,
-    rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
-    vulnerabilityIndex: number = defaultValues.fighter.vulnerabilityIndex,
-    logger: Logger,
-  ) {
-    this.name = name;
-    this.health = health;
-    this.strength = strength;
-    this.speed = speed;
-    this.blockFail = blockFail;
-    this.isBlocking = isBlocking;
-    this.stamina = 100;
-    this.rageSuceptibility = rageSuceptibility;
-    this.vulnerabilityIndex = vulnerabilityIndex;
-    this.logger = logger;
-  }
+    public readonly name: string,
+    protected health: number,
+    protected strength: number,
+    protected speed: number,
+    protected blockFail: number = defaultValues.common.blockFail,
+    protected isBlocking: boolean = defaultValues.common.isBlocking,
+    protected rageSuceptibility: boolean = defaultValues.common
+      .rageSuceptibility,
+    protected vulnerabilityIndex: number = defaultValues.fighter
+      .vulnerabilityIndex,
+    protected logger: Logger,
+  ) {}
 
   getStats(): string {
     return `${this.name} | Health: ${this.health} Strength: ${this.strength} Speed: ${this.speed} Stamina: ${this.stamina}`;

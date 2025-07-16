@@ -3,6 +3,7 @@ export const defaultValues = {
     blockFail: 0,
     isBlocking: false,
     rageSuceptibility: false,
+    stamina: 100,
   },
   fighter: {
     vulnerabilityIndex: 0.7,
