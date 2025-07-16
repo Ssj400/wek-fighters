@@ -2,10 +2,11 @@ import { Fighter } from "./Fighter";
 import { Logger } from "../common/Logger";
 import { FighterMoves } from "../types/types";
 import { defaultValues } from "../common/defaultValues";
+import { GameManager } from "../managers/GameManager";
 
 export class CounterPuncher extends Fighter {
   private onCounterCallback?: () => void;
-
+  logger: Logger;
   constructor(
     name: string,
     health: number,
@@ -17,7 +18,6 @@ export class CounterPuncher extends Fighter {
     rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
     vulnerabilityIndex: number = defaultValues.counterPuncher
       .vulnerabilityIndex,
-    logger: Logger,
   ) {
     super(
       name,
@@ -28,8 +28,8 @@ export class CounterPuncher extends Fighter {
       isBlocking,
       rageSuceptibility,
       vulnerabilityIndex,
-      logger,
     );
+    this.logger = GameManager.getInstance().createLogger(this.name);
   }
 
   override getStats(): string {
@@ -115,7 +115,6 @@ export class CounterPuncher extends Fighter {
       this.counterIndex,
       this.rageSuceptibility,
       this.vulnerabilityIndex,
-      this.getLogger(),
     );
   }
 

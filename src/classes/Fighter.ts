@@ -3,6 +3,7 @@ import type { Attack } from "../common/attacks";
 import { validateLife } from "../logic/validateLife";
 import { FighterMoves } from "../types/types";
 import { defaultValues } from "../common/defaultValues";
+import { GameManager } from "../managers/GameManager";
 
 export class Fighter {
   protected stamina: number = defaultValues.common.stamina;
@@ -14,6 +15,7 @@ export class Fighter {
   protected onBlockCallback?: () => void;
   protected lastDamage: number = 0;
   private lastMove: FighterMoves = FighterMoves.NONE;
+  protected logger: Logger;
 
   constructor(
     public readonly name: string,
@@ -26,8 +28,9 @@ export class Fighter {
       .rageSuceptibility,
     protected vulnerabilityIndex: number = defaultValues.fighter
       .vulnerabilityIndex,
-    protected logger: Logger,
-  ) {}
+  ) {
+    this.logger = GameManager.getInstance().createLogger(this.name);
+  }
 
   getStats(): string {
     return `${this.name} | Health: ${this.health} Strength: ${this.strength} Speed: ${this.speed} Stamina: ${this.stamina}`;
@@ -310,7 +313,6 @@ export class Fighter {
       this.isBlocking,
       this.rageSuceptibility,
       this.vulnerabilityIndex,
-      this.logger,
     );
   }
 

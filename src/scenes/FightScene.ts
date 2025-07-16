@@ -5,8 +5,8 @@ import { playerTurn } from "../logic/playerTurn";
 import { CounterPuncher } from "../classes/CounterPuncher";
 import { addMuteButton, addFullScreenButton } from "../common/uiHelpers";
 import { playSound } from "../common/sound";
-import { Logger } from "../common/Logger";
 import type { Difficulty, FightSceneData } from "../types/types";
+import { GameManager } from "../managers/GameManager";
 
 export class FightScene extends Phaser.Scene {
   private fightMessages: string[] = [];
@@ -654,12 +654,8 @@ export class FightScene extends Phaser.Scene {
       restartText.setStyle({ color: "#fff" });
     });
 
-    //Set up the logger and background
-    const playerLogger = new Logger(this, this.initialData.player.name);
-    const opponentLogger = new Logger(this, this.initialData.opponent.name);
-
-    this.initialData.player.setLogger(playerLogger);
-    this.initialData.opponent.setLogger(opponentLogger);
+    //Set up the logger, players and background
+    GameManager.getInstance().setCurrentScene(this);
 
     this.player = this.initialData.player.clone();
     this.opponent = this.initialData.opponent.clone();

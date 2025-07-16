@@ -1,10 +1,12 @@
 import { Fighter } from "./Fighter";
 import { Logger } from "../common/Logger";
 import { defaultValues } from "../common/defaultValues";
+import { GameManager } from "../managers/GameManager";
 
 export class OutBoxer extends Fighter {
   jabCount: number;
   distanceControlTurnsLeft: number;
+  logger: Logger;
   constructor(
     name: string,
     health: number,
@@ -14,7 +16,6 @@ export class OutBoxer extends Fighter {
     isBlocking: boolean = defaultValues.common.isBlocking,
     rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
     vulnerabilityIndex: number = defaultValues.outBoxer.vulnerabilityIndex,
-    logger: Logger,
   ) {
     super(
       name,
@@ -25,11 +26,11 @@ export class OutBoxer extends Fighter {
       isBlocking,
       rageSuceptibility,
       vulnerabilityIndex,
-      logger,
     );
     this.jabCount = defaultValues.outBoxer.jabCount;
     this.distanceControlTurnsLeft =
       defaultValues.outBoxer.distanceControlTurnsLeft;
+    this.logger = GameManager.getInstance().createLogger(this.name);
   }
   override getFighterClass(): string {
     return "OutBoxer";
@@ -69,7 +70,6 @@ export class OutBoxer extends Fighter {
       this.isBlocking,
       this.rageSuceptibility,
       this.vulnerabilityIndex,
-      this.getLogger(),
     );
   }
 }

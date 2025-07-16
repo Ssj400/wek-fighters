@@ -1,9 +1,11 @@
 import { Fighter } from "./Fighter";
-import { Logger } from "../common/Logger";
 import { FighterMoves } from "../types/types";
 import { defaultValues } from "../common/defaultValues";
+import { Logger } from "../common/Logger";
+import { GameManager } from "../managers/GameManager";
 
 export class Defender extends Fighter {
+  logger: Logger;
   constructor(
     name: string,
     health: number,
@@ -14,7 +16,6 @@ export class Defender extends Fighter {
     public defense: number,
     rageSuceptibility: boolean = defaultValues.common.rageSuceptibility,
     vulnerabilityIndex: number = defaultValues.defender.vulnerabilityIndex,
-    logger: Logger,
   ) {
     super(
       name,
@@ -25,8 +26,8 @@ export class Defender extends Fighter {
       isBlocking,
       rageSuceptibility,
       vulnerabilityIndex,
-      logger,
     );
+    this.logger = GameManager.getInstance().createLogger(this.name);
   }
   override getStats(): string {
     return `Statistics | fighter: ${this.name}, health: ${this.health}, strength: ${this.strength}, stamina: ${this.stamina} *SPECIAL* defense: ${this.defense}, speed: ${this.speed}\n`;
@@ -107,7 +108,6 @@ export class Defender extends Fighter {
       this.defense,
       this.rageSuceptibility,
       this.vulnerabilityIndex,
-      this.getLogger(),
     );
   }
 }
